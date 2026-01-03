@@ -1,6 +1,5 @@
 import { Accordion, AspectRatio, Heading, Container, Image, Flex, Button, Separator, Text, Span, List, Link } from '@chakra-ui/react';
 import { Provider } from "./components/ui/provider"
-import './App.css'
 
 function App() {
 
@@ -392,7 +391,7 @@ function App() {
           <List.Item>【毎月】６０分のグループクラス（第２金曜20:30-21:30）</List.Item>
           <List.Item>【毎月】１２０分のオンライン上のエクスタティックダンス（第４日曜20:30-22:30）</List.Item>
         </List.Root>
-        <Text className='highlight'>✧特典✧</Text>
+        <Text className='highlight' mt="1em">✧特典✧</Text>
         <List.Root mb={8}>
           <List.Item>【毎月】５分のミニコンテンツ配信 ⇨ 即実践できる！<span className="highlight">ソマティックセルフケア</span> （身体に還り心をケアする方法）の紹介</List.Item>
           <List.Item>（身体に還り心をケアする方法）の紹介</List.Item>
@@ -584,7 +583,7 @@ function App() {
         <Text mb={8}>現在は東京とポルトガルを拠点に活動し、日本とポルトガルの架け橋となるようなプロジェクトを始動。</Text>
         
         <Separator mb={8} />
-        
+
       </Container>
     </Provider>
   );
