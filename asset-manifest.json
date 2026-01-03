@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/ecstaticdancetokyo/static/css/main.30bb73f6.css",
-    "main.js": "/ecstaticdancetokyo/static/js/main.a53b01d9.js",
+    "main.js": "/ecstaticdancetokyo/static/js/main.d00c812e.js",
     "static/js/453.551b25f6.chunk.js": "/ecstaticdancetokyo/static/js/453.551b25f6.chunk.js",
     "index.html": "/ecstaticdancetokyo/index.html",
     "main.30bb73f6.css.map": "/ecstaticdancetokyo/static/css/main.30bb73f6.css.map",
-    "main.a53b01d9.js.map": "/ecstaticdancetokyo/static/js/main.a53b01d9.js.map",
+    "main.d00c812e.js.map": "/ecstaticdancetokyo/static/js/main.d00c812e.js.map",
     "453.551b25f6.chunk.js.map": "/ecstaticdancetokyo/static/js/453.551b25f6.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.30bb73f6.css",
-    "static/js/main.a53b01d9.js"
+    "static/js/main.d00c812e.js"
   ]
 }
