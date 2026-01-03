@@ -4,7 +4,7 @@ const stripePromise = loadStripe("pk_live_51LidycLkbVO6UUDrArSmM2T5QsKfJz3wv522d
 
 async function subscribe() {
   const res = await fetch(
-    "https://emi-stripe-subscriptions.goretuzk.workers.dev/webhook",
+    "https://emi-stripe-subscriptions.goretuzk.workers.dev/create-checkout-session",
     { method: "POST" }
   );
 
