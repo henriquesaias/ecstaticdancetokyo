@@ -1,5 +1,6 @@
 import { Accordion, AspectRatio, Heading, Container, Image, Flex, Button, Separator, Text, Span, List, Link } from '@chakra-ui/react';
 import { Provider } from "./components/ui/provider"
+import { subscribe } from './stripe';
 
 function App() {
 
@@ -199,7 +200,8 @@ function App() {
           colorPalette="red"
           width="100%"
           variant="outline"
-          href="https://buy.stripe.com/test_9B628seei0Ci5nx46H4ow0d"
+          onClick={subscribe}
+          //href="https://buy.stripe.com/test_9B628seei0Ci5nx46H4ow0d"
         >
           今すぐ申し込む　（初月無料！）
         </Button>
