@@ -1,8 +1,14 @@
+import { useEffect } from "react";
 import { Accordion, AspectRatio, Heading, Container, Image, Flex, Button, Separator, Text, Span, List, Link } from '@chakra-ui/react';
 import { Provider } from "./components/ui/provider"
 import { subscribe } from './stripe';
 
 function App() {
+  useEffect(() => {
+    if (window.location.hash === "#subscribe_successful") {
+      alert("Add a success message");
+    }
+  }, [window.location.hash]);
 
   const QAitems = [
     {
@@ -201,7 +207,7 @@ function App() {
           width="100%"
           variant="outline"
           onClick={subscribe}
-          //href="https://buy.stripe.com/test_9B628seei0Ci5nx46H4ow0d"
+        //href="https://buy.stripe.com/test_9B628seei0Ci5nx46H4ow0d"
         >
           今すぐ申し込む　（初月無料！）
         </Button>
@@ -583,7 +589,7 @@ function App() {
           心身を解放し可能性を目覚めさせ、自分らしい人生を切り開くためのサポートやセッション、ワークショップやイベントを開催している。</Text>
 
         <Text mb={8}>現在は東京とポルトガルを拠点に活動し、日本とポルトガルの架け橋となるようなプロジェクトを始動。</Text>
-        
+
         <Separator mb={8} />
 
       </Container>
