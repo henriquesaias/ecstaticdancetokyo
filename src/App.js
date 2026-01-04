@@ -251,7 +251,7 @@ function App() {
 
         <Text mb={8}>そう感じる方のための、継続的に学び、成長し、高め合うオンラインコミュニティです。</Text>
 
-        <Flex justifyContent="space-between" gap={4} mb={8}>
+        <Flex justifyContent="space-evenly" flexWrap="wrap" gap={4} mb={8}>
           <Image maxH={400} src="https://principled-ethernet-41a.notion.site/image/attachment%3A1f50b82e-0654-4d36-86e7-d044e153fd4c%3A207891_0.jpg?table=block&id=2d6e7ef4-828e-8050-931e-e022543943a1&spaceId=beeff5d9-602b-463c-8dee-35d6b9e6c363&width=580&userId=&cache=v2" />
           <Image maxH={400} src="https://principled-ethernet-41a.notion.site/image/attachment%3A4f4b3953-8416-4a16-a826-b414d01713e5%3A194386_0.jpg?table=block&id=2d6e7ef4-828e-8044-bff0-e133088bedb0&spaceId=beeff5d9-602b-463c-8dee-35d6b9e6c363&width=580&userId=&cache=v2" />
         </Flex>
