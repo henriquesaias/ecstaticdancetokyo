@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/ecstaticdancetokyo/static/css/main.30bb73f6.css",
-    "main.js": "/ecstaticdancetokyo/static/js/main.1646895e.js",
-    "static/js/453.551b25f6.chunk.js": "/ecstaticdancetokyo/static/js/453.551b25f6.chunk.js",
-    "index.html": "/ecstaticdancetokyo/index.html",
-    "main.30bb73f6.css.map": "/ecstaticdancetokyo/static/css/main.30bb73f6.css.map",
-    "main.1646895e.js.map": "/ecstaticdancetokyo/static/js/main.1646895e.js.map",
-    "453.551b25f6.chunk.js.map": "/ecstaticdancetokyo/static/js/453.551b25f6.chunk.js.map"
+    "main.css": "/static/css/main.30bb73f6.css",
+    "main.js": "/static/js/main.cf98778b.js",
+    "static/js/453.551b25f6.chunk.js": "/static/js/453.551b25f6.chunk.js",
+    "index.html": "/index.html",
+    "main.30bb73f6.css.map": "/static/css/main.30bb73f6.css.map",
+    "main.cf98778b.js.map": "/static/js/main.cf98778b.js.map",
+    "453.551b25f6.chunk.js.map": "/static/js/453.551b25f6.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.30bb73f6.css",
-    "static/js/main.1646895e.js"
+    "static/js/main.cf98778b.js"
   ]
 }
