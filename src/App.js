@@ -220,7 +220,7 @@ function App() {
 
         <AspectRatio maxW={400} ratio={9 / 16} my={8} mx="auto">
           <iframe
-            src="https://file.notion.so/f/f/beeff5d9-602b-463c-8dee-35d6b9e6c363/a93397a5-dced-4ee6-9447-a14d0c4f2420/circle.mp4?table=block&id=2dde7ef4-828e-8043-94fa-ffa43df1afaa&spaceId=beeff5d9-602b-463c-8dee-35d6b9e6c363&expirationTimestamp=1767463200000&signature=fBV1CkCXS3zuvLj4gQfVe2LO0vv0ATA7_CQuGw7QjP8"
+            src="https://youtube.com/embed/6AZmIdXH--w"
             allowFullScreen
           />
         </AspectRatio>
