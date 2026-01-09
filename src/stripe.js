@@ -1,6 +1,6 @@
-const subscribe = async () => {
+const subscribe = async (subscriptionLength) => {
   const res = await fetch(
-    "https://emi-stripe-subscriptions.goretuzk.workers.dev/create-checkout-session",
+    `https://emi-stripe-subscriptions.goretuzk.workers.dev/subscribe-${subscriptionLength}`,
     { method: "POST" }
   );
 

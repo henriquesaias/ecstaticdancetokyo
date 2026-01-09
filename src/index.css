@@ -1,26 +1,39 @@
 body {
   font-family: ui-sans-serif, -apple-system, "system-ui", "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol";
-  -webkit-font-smoothing: antialiased;
+  -webkit-font-smoothing: auto;
 }
 
 :root {
   --primary-color: #fff;
+  --gray: #aaa;
   --highlight-color: #cf5148;
 }
 
-a {
-  color: inherit;
+p, ul {
+  font-size: 105%;
+}
+
+h3 {
+  font-size: 1.6em
 }
 
 p {
   margin-bottom: 1em;
 }
 
-.highlight {
+li {
+  margin-bottom: .5em;
+}
+
+a:not(.highlight) {
+  color: var(--gray);
+}
+
+.highlight, .highlight a {
   color: var(--highlight-color);
 }
 
 .hero-banner {
   width: 100vw;
-  max-height: 300px;
+  max-height: 220px;
 }
