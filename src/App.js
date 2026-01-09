@@ -2,11 +2,12 @@ import { useEffect } from "react";
 import { Accordion, AspectRatio, Heading, Container, Image, Flex, Button, Separator, Text, Span, List, Link, Avatar } from '@chakra-ui/react';
 import { Provider } from "./components/ui/provider"
 import { subscribe } from './stripe';
+import { LuFile } from "react-icons/lu"
 
 function App() {
   useEffect(() => {
     if (window.location.hash === "#subscribe_successful") {
-      alert("Add a success message");
+      console.log("Add a success message");
     }
   }, [window.location.hash]);
 
@@ -162,13 +163,18 @@ function App() {
       />
 
       <Container mx="auto" maxW={800} pb={8}>
-        <Image
-          alt="Ecstatic Dance Tokyo"
-          w={125}
-          src="logo.webp"
-          transform='translateY(-50%)'
-          borderRadius={4}
-        />
+        <Flex alignItems="center" justifyContent="center">
+          <Image
+            alt="Ecstatic Dance Tokyo"
+            w={125}
+            src="logo.webp"
+            transform='translateY(-50%)'
+            borderRadius={4}
+          />
+          <Link href="https://ecstaticdancetokyo.peatix.com" target="_blank" ml="auto">
+            <Button colorPalette='orange'>Peatix</Button>
+          </Link>
+        </Flex>
 
         <Heading className='highlight' as="h4" size="xl" mb={2}>
           2026年2月2日オープン！1月11日募集開始
@@ -609,14 +615,14 @@ function App() {
         <Separator mb={8} />
 
         <Heading as="h3" size="2xl" mb={8}>
-          <Link href="https://principled-ethernet-41a.notion.site/2dfe7ef4828e804e83a4d9759da5f84d" target="_blank">特定商取引法に基づく表記</Link>
+          <Link href="https://principled-ethernet-41a.notion.site/2dfe7ef4828e804e83a4d9759da5f84d" target="_blank"><LuFile />  特定商取引法に基づく表記</Link>
         </Heading>
 
         <Text>
-          <Link href="https://principled-ethernet-41a.notion.site/2dfe7ef4828e804e83a4d9759da5f84d?pvs=25" target="_blank">特定商取引法に基づく表記</Link>
+          <Link href="https://principled-ethernet-41a.notion.site/2dfe7ef4828e804e83a4d9759da5f84d?pvs=25" target="_blank"><LuFile />  特定商取引法に基づく表記</Link>
         </Text>
         <Text>
-          <Link href="https://principled-ethernet-41a.notion.site/Facebook-2e2e7ef4828e808d9314c4f70c006712?pvs=25" target="_blank">Facebookアカウント作成方法</Link>
+          <Link href="https://principled-ethernet-41a.notion.site/Facebook-2e2e7ef4828e808d9314c4f70c006712?pvs=25" target="_blank"><LuFile />  Facebookアカウント作成方法</Link>
         </Text>
 
       </Container>
