@@ -289,7 +289,7 @@ function App() {
           <List.Item>海外のエクスタティックダンスDJやファシリテーターとの繋がれるチャンス</List.Item>
           <List.Item><span className="highlight" style={{ textDecoration: 'underline' }}>メンバー限定イベント割引</span>やその他ボーナス特典をゲットできる</List.Item>
         </List.Root>
-        <Text mb={8}> 　　　　　↖これめちゃくちゃお得です！</Text>
+        <Text mb={8}> (これめちゃくちゃお得です！)</Text>
 
         <Image
           mb={8}
@@ -627,7 +627,7 @@ function App() {
 
         <Separator mb={8} />
 
-        <Text mb={8}>© {new Date().getFullYear()} Ecstatic Dance Tokyo</Text>
+        <Text mb={8} textAlign='center'><small>© {new Date().getFullYear()} Ecstatic Dance Tokyo</small></Text>
 
       </Container>
     </Provider >
