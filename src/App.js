@@ -52,10 +52,10 @@ function App() {
     },
     {
       value: "5",
-      question: "ジャーナリングやノートワークは必須ですか？",
+      question: " 忙しくて毎回参加できないかもしれません。",
       answer: <>
-        <Text><strong>必須ではありません。</strong></Text>
-        <Text>あくまで「おすすめのツール」としてご紹介しています。書きたい時は書き、感じたい時は感じ、踊りたい時は踊り、休みたい時はお休みする等ご自身のリズムを大切に☺</Text>
+        <Text><strong>大丈夫です。</strong></Text>
+        <Text>ライブ参加できなくても、グループクラス・エクスタティックダンス共に30日間アーカイブ視聴が可能です。</Text>
       </>
     },
     {
@@ -282,7 +282,7 @@ function App() {
           <List.Item>孤独感を感じることなく仲間と一緒に成長できる安心感</List.Item>
           <List.Item>グループクラス→エクスタティックダンスの流れで着実な変化がでやすい</List.Item>
           <List.Item>踊りが１回限りの特別な体験から在り方の変化へ</List.Item>
-          <List.Item>海外のエクスタティックダンスDJやファシリテーターとの↖繋がれるチャンス</List.Item>
+          <List.Item>海外のエクスタティックダンスDJやファシリテーターとの繋がれるチャンス</List.Item>
           <List.Item><span className="highlight" style={{ textDecoration: 'underline' }}>メンバー限定イベント割引</span>やその他ボーナス特典をゲットできる</List.Item>
         </List.Root>
         <Text mb={8}> 　　　　　↖これめちゃくちゃお得です！</Text>
@@ -301,7 +301,7 @@ function App() {
         <Text>毎月２回</Text>
 
         <List.Root mb={8}>
-          <List.Item mb={8}>１.テーマ別クラス６０分
+          <List.Item mb={8}><strong>１.テーマ別クラス６０分</strong>
             <List.Root variant="plain">
               <List.Item>（第２金曜20:30-21:30）</List.Item>
               <List.Item>身体の基盤を丁寧に整えながら、毎月テーマに沿って感覚的に踊るステップをガイド♪</List.Item>
@@ -313,7 +313,7 @@ function App() {
             </List.Root>
           </List.Item>
 
-          <Text mb={2}>２.エクスタティックダンス９０－１２０分</Text>
+          <Text mb={2}><strong>２.エクスタティックダンス９０－１２０分</strong></Text>
           <List.Root variant="plain">
             <List.Item>（第４日曜20:30-22:30）</List.Item>
             <List.Item>　現場の体験を時空を超えオンラインでも！</List.Item>
