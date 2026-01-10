@@ -1,8 +1,7 @@
 import { useEffect } from "react";
-import { Accordion, AspectRatio, Heading, Container, Image, Flex, Button, Separator, Text, Span, List, Link, Avatar } from '@chakra-ui/react';
+import { Accordion, AspectRatio, Heading, Container, Image, Flex, Button, Separator, Text, Span, List, Link } from '@chakra-ui/react';
 import { Provider } from "./components/ui/provider"
 import { subscribe } from './stripe';
-import { LuFile } from "react-icons/lu"
 
 function App() {
   useEffect(() => {
@@ -18,17 +17,17 @@ function App() {
       answer: <>
         <Text><strong>もちろん大歓迎です！</strong></Text>
         <Text>上手下手、正解間違いなど関係なく、身体を自由に動かす踊る瞑想です。</Text>
-        <Text>ステップも覚える振付けもありません。ダンス未経験や初心者の方、経験者共に歓迎です。</Text>
+        <Text>ステップも覚える振付けもありません。</Text>
+        <Text>踊るだけでなく心と身体をリンクさせることに重点をおいてます☻</Text>
       </>
     },
     {
       value: "2",
       question: "顔出しが恥ずかしいので、カメラはオフでもいいですか？",
       answer: <>
-        <Text><strong>どちらでも構いません♪</strong></Text>
-        <Text></Text>
-        <Text></Text>
-        <Text></Text>
+        <Text><strong>可能な限りONでお願いしています♪</strong></Text>
+        <Text>参加者が画面上で互いを認識しながら繋がることで「仲間意識」が生まれます。</Text>
+        <Text>見られること発言することに慣れることで自己成長を促したり体験の深さも変わってくるので可能な限りオンをお勧めしています。やむを得ない場合はオフでも大丈夫です。</Text>
       </>
     },
     {
@@ -40,19 +39,15 @@ function App() {
     },
     {
       value: "4",
-      question: "エクスタティックダンスだけのコミュニティですか？",
+      question: "途中参加・途中退出はできますか？",
       answer: <>
-        <Text><strong>エクスタティックダンスが主軸とする、<span className='highlight'>コンシャスコミュニティー</span>です。</strong></Text>
+        <Text><strong> 可能です。</strong></Text>
         <Text>コンシャスコミュニティーとは、マインドフルなライフスタイルに意識を向ける集団を差し、価値観を共有し、互いに協力し合うことで、意識を高め合ったり、より良い社会の実現を目指します。</Text>
 
         <List.Root>
-          <List.Item>身体・感覚・感情を整える方法</List.Item>
-          <List.Item>日常に落とし込めるセルフケアや習慣づくり</List.Item>
-          <List.Item>新月/満月のテーマやジャーナリング法</List.Item>
-          <List.Item>リチュアル</List.Item>
+          <List.Item>エクスタティックダンスは流れを大切にしているので、できるだけ時間通りの参加をおすすめしています。</List.Item>
+          <List.Item>グループクラスは初めからのご参加をお願いしています。</List.Item>
         </List.Root>
-
-        <Text>など幅広い内容を発信しています。</Text>
       </>
     },
     {
@@ -73,43 +68,37 @@ function App() {
     },
     {
       value: "7",
-      question: "途中参加・途中退出はできますか？",
+      question: "エクスタティックダンスだけのコミュニティですか？",
       answer: <>
-        <Text><strong>可能です。</strong></Text>
-        <Text>エクスタティックダンスは流れを大切にしているので、できるだけ時間通りの参加をおすすめしていますが、途中参加や退出でも大丈夫です。</Text>
-        <Text>アーカイブも残ります。</Text>
-        <Text>グループクラスは初めからのご参加をお願いしています。</Text>
+        <Text><strong>エクスタティックダンスを主軸とする、</strong><span className="highlight">コンシャスコミュニティー</span><strong>です。</strong></Text>
+        <Text>コンシャスコミュニティーとは、マインドフルなライフスタイルに意識を向ける集団を差し、価値観を共有し互いに協力し合うことで、意識を高め合いながらより良い社会の実現を目指します。</Text>
+        <Text>「第２の居場所」のようなアットホームなコミュニティーです☻</Text>
       </>
     },
     {
       value: "8",
-      question: "忙しくて毎回参加できないかもしれません。",
+      question: "ジャーナリングやノートワークは必須ですか？",
       answer: <>
-        <Text><strong>大丈夫です。</strong></Text>
-        <Text>ライブ参加できなくても、グループクラス・エクスタティックダンス共に30日間アーカイブ視聴が可能です。</Text>
+        <Text><strong>必須ではありません。</strong></Text>
+        <Text>あくまで「おすすめのツール」としてご紹介しています。書きたい時は書き、感じたい時は感じ、踊りたい時は踊り、休みたい時はお休みする等ご自身のリズムを大切に♪</Text>
       </>
     },
     {
       value: "9",
-      question: "スマホでも参加できますか？",
+      question: "EMIさんと交流したいだけの理由で参加してもいいですか？",
       answer: <>
-        <Text><strong>はい、可能です。</strong></Text>
-        <Text>ただし音量に限界があるため、ブルーツースイヤホンやヘッドフォンがおすすめです。</Text>
+        <Text><strong>もちろんです☻☻</strong></Text>
+        <Text>このコミュニティーは成長と繋がりの場であると同時に、海外にいるEMIの経験やインターナショナルなコネクションを共有する場でもあります。お茶会やウィメンズサークルも開催しますのでお楽しみに♪</Text>
       </>
     },
     {
       value: "10",
-      question: "お茶会では何をしますか？",
+      question: "お茶会やウィメンズサークルでは何をしますか？",
       answer: <>
-        <Text><strong>その時集まったメンバーの「今」感じていることを共有する温かいアットホームな時間です♪</strong></Text>
+        <Text><strong>その時集まったメンバーの「今」感じていることを仲間と共有する温かいアットホームな時間です♪</strong></Text>
         <List.Root>
-          <List.Item>最近の気づき</List.Item>
-          <List.Item>踊って感じたこと</List.Item>
-          <List.Item>日常での変化</List.Item>
-          <List.Item>ちょっとしたモヤモヤ</List.Item>
+          <List.Item>最近の気づき、日常での変化、モヤモヤや悩み事、近況報告など、リラックスしながら分かち合っていきます。仲間と絆を深める時間です。話さなくても、聞いているだけでもOKです♪</List.Item>
         </List.Root>
-        <Text>などを、リラックスしながら分かち合う時間です。</Text>
-        <Text>話さなくても、聞いているだけでもOKです♪</Text>
       </>
     },
     {
@@ -122,36 +111,21 @@ function App() {
     },
     {
       value: "12",
-      question: "最低３ヶ月参加が必要なのはなぜですか？",
+      question: "最低どのぐらい続けてみるのがおすすめですか？",
       answer: <>
-        <Text>このコミュニティは「一度体験して終わり」ではなく、継続によって身体と意識が変わっていくためです。変化が現れ始めるのに３か月かかります。</Text>
-        <Text>また決済システムの都合上、最低３ヶ月のご参加をお願いしています。</Text>
-        <Text>ご了承の上ご登録下さい。</Text>
+        <Text>このコミュニティは「一度体験して終わり」ではなく、継続する事で心身に変化が現れ始める３か月がお勧めです。定期的にメンテナンスできる場として是非ご自分のペースで続けてみて下さい♪</Text>
       </>
     },
     {
       value: "13",
-      question: "退会したい場合どうすればいいですか？",
+      question: "退会する場合の手順を教えて下さい。",
       answer: <>
-        <List.Root>
-          <List.Item>フェイスブックコミュニティーグループにて「今月で解約します」等のメッセージを送っていただければこちらでキャンセルいたします。</List.Item>
-          <List.Item>もしご自分でキャンセルされたい場合は、以下の手順でできます：</List.Item>
+        <List.Root variant='marker'>
+          <List.Item>以下の手順でできます：</List.Item>
         </List.Root>
         <Text>「カスタマーポータルURL」をクリック⇨自分のメールアドレスを入力⇨認証コード（メールで届く）を入力⇨「サブスクリプションを管理する」をクリック⇨「キャンセル」ボタンを押す⇨完了</Text>
       </>
-    },
-    {
-      value: "14",
-      question: "いつまでにキャンセルすれば翌月請求されない？",
-      answer: <>
-        <Text><strong>次回請求日の前にキャンセルいただければ翌月は請求されません。</strong></Text>
-        <Text>例）請求日が毎月 15日の場合</Text>
-        <List.Root>
-          <List.Item>14日にキャンセル → 翌月請求されない（ご利用は次回の請求日までOKです）</List.Item>
-          <List.Item>15日にキャンセル → 次月の請求は発生してしまう</List.Item>
-        </List.Root>
-      </>
-    },
+    }
   ]
 
   return (
@@ -172,7 +146,7 @@ function App() {
             borderRadius={4}
           />
           <Link href="https://ecstaticdancetokyo.peatix.com" target="_blank" ml="auto">
-            <Button colorPalette='orange'>Peatix</Button>
+            <Button colorPalette='orange'>イベント申込み</Button>
           </Link>
         </Flex>
 
@@ -183,7 +157,7 @@ function App() {
         <Text mb={8} className='highlight'>初月は無料でご参加いただけます♪</Text>
 
         <Heading as="h4" size="xl" mb={8}>
-          【月額制】心身を整え波動を高め合う
+          【月額制】心身を整え波動を高める
         </Heading>
 
         <Heading as="h1" size="3xl" fontWeight={700} fontStyle="italic" mb={8}>
@@ -199,16 +173,16 @@ function App() {
           src="https://principled-ethernet-41a.notion.site/image/attachment%3Ab6cf9f36-012d-4e02-8dd6-00ea89e7adcd%3Awebsite.png?table=block&id=2d6e7ef4-828e-80dd-ae53-d02e13f9ce93&spaceId=beeff5d9-602b-463c-8dee-35d6b9e6c363&width=1420&userId=&cache=v2"
         />
 
-        <Heading as="h3" size="2xl" mb={6}>
+        <Heading as="h4" size="xl" mb={6}>
           身体を<span className='highlight'>「癒しと変容のツール」</span>へ
         </Heading>
 
-        <Heading as="h3" size="2xl" mb={6}>
-          心・身体・エネルギーを整える<span className='highlight'>毎月のリセットタイム</span>
+        <Heading as="h4" size="xl" mb={6}>
+          心/身体/エネルギーを整える<span className='highlight'>毎月のリセットタイム</span>
         </Heading>
 
-        <Heading as="h3" size="2xl" mb={6}>
-          感じながら動き、手放し、目覚め、 <span className='highlight'>人生を動かす</span>
+        <Heading as="h4" size="xl" mb={6}>
+          感じながら踊り、目覚め、<span className='highlight'>人生を動かす</span>
         </Heading>
 
         <Image
@@ -249,7 +223,7 @@ function App() {
         </Text>
 
         <Text mb={8}>
-          ただ踊るだけではなく、感情の解放、エネルギーの循環、習慣づくりを通して、本来の自分を目覚めさせるプロセスを大切にしています。
+          ただ踊るだけではなく、感情エネルギーの循環、習慣づくりを通して<span className='highlight'>心と身体をリンクさせ、自己表現力を磨き上げ、本来の自分を目覚めさせるプロセス</span>を大切にしています。
         </Text>
 
         <Text mb={8}>
@@ -257,18 +231,18 @@ function App() {
         </Text>
 
         <Text mb={8}>
-          エクスタティックダンス東京主宰・ファシリテーター EMI の海外で得た叡智や経験をベースに、<span className='highlight'>身体を癒しと変容のツール</span>として使う感覚を育み、セルフケア、ジャーナリング、エシカル情報などをシェアしながら、心と身体の両方を整えていく<span className='highlight'>実践型・体感型のコミュニティ</span>です。
+          エクスタティックダンス東京主宰・ファシリテーター EMI のダンス/ムーブメント/マッサージのバックグラウンドや海外経験をベースに、<span className='highlight'>身体を癒しと変容のツール</span>として使う感覚を育み、心と身体の両方を整えていく<span className='highlight'>実践型・体感型のコミュニティ</span>です。
         </Text>
 
         <List.Root mb={8} variant="plain">
+          <List.Item>「自由に自己表現したい」</List.Item>
           <List.Item>「もっと深く身体と繋がりたい」</List.Item>
-          <List.Item>「本質を思い出したい」</List.Item>
           <List.Item>「軽やかに生きたい」</List.Item>
           <List.Item>「将来ファシリテーターとして活動したい」</List.Item>
           <List.Item>「コミュニティの一員として繋がりを深めたい」</List.Item>
         </List.Root>
 
-        <Text mb={8}>そう感じる方のための、継続的に学び、成長し、高め合うオンラインコミュニティです。</Text>
+        <Text mb={8}>そんな方のために継続的に学び、成長し、高め合うオンラインコミュニティです。</Text>
 
         <Flex justifyContent="space-evenly" flexWrap="wrap" gap={4} mb={8}>
           <Image maxH={400} src="https://principled-ethernet-41a.notion.site/image/attachment%3A1f50b82e-0654-4d36-86e7-d044e153fd4c%3A207891_0.jpg?table=block&id=2d6e7ef4-828e-8050-931e-e022543943a1&spaceId=beeff5d9-602b-463c-8dee-35d6b9e6c363&width=580&userId=&cache=v2" />
@@ -282,34 +256,36 @@ function App() {
         </Text>
 
         <Text mb={8}>
-          本来の自分を目覚めさせるためには、**回路を開き、育て続けることが鍵。<br />
-          オンラインでの継続は、その状態を「一度限りの特別体験」に終わらすことなく、**何度も思い出しながら当たり前の状態へと定着させるための場です。
+          本来の自分を目覚めさせるためには、<span className="highlight">回路を開き、育て続けることが鍵</span>。<br />
+          オンラインでの継続は、その状態を「一度限りの特別体験」に終わらすことなく、<strong>何度も思い出しながら当たり前の状態へと定着させるための場です。</strong>
+
         </Text>
 
         <Text mb={8}>
-          ここで発信する内容を継続していくことで、眠っていたエネルギーが流れ始め、<span className='highlight'>ボディーマインド、エネルギーレベルでのシフト</span>を体感できるようになります。
+          ここで発信する内容を継続していくことで、滞っていたエネルギーが流れ始め、<span className='highlight'>ボディー・マインド・エネルギー状態の変化</span>を体感できるように。
         </Text>
 
         <Text mb={8}>
-          それらを日常生活に落とし込み体現していくことで、ダンスの質だけでなく、<span className='highlight'>在り方、生き方、人との関わり方までも変わり、自然と物事がスムーズに運ばれる</span>ように。
+          それらをちゃんと日常に落とし込むことで、在り方、人との関わり方、生き方に変化が現れ、自然な形で人生が軽やかに動き出し始めるのをきっと実感できるはずです。
         </Text>
 
         <Separator mb={8} />
 
         <Heading as="h3" size="2xl" mb={8}>オンラインコミュニティーに参加するメリット</Heading>
 
-        <List.Root mb={8}>
+        <List.Root mb={2}>
           <List.Item>どんな時も安心して戻ってこれる居場所と仲間の存在</List.Item>
-          <List.Item>場所を選ばずご自分のペースで参加、継続できる</List.Item>
+          <List.Item>場所を選ばずご自分のペースで継続できる</List.Item>
           <List.Item>一人では続かないことも、自然に継続できる</List.Item>
           <List.Item>コミュニティとしての共同体意識が深まる</List.Item>
-          <List.Item>普段出せない所も自分の安心安全の空間で解放できる</List.Item>
+          <List.Item>普段出せない部分もご自身の安全空間で解放できる</List.Item>
           <List.Item>孤独感を感じることなく仲間と一緒に成長できる安心感</List.Item>
           <List.Item>グループクラス→エクスタティックダンスの流れで着実な変化がでやすい</List.Item>
-          <List.Item>踊りが特別な体験から在り方の変化へ</List.Item>
-          <List.Item>海外のエクスタティックダンスDJやファシリテーターとの繋がれるチャンス</List.Item>
-          <List.Item>ボーナス特典をゲットできる</List.Item>
+          <List.Item>踊りが１回限りの特別な体験から在り方の変化へ</List.Item>
+          <List.Item>海外のエクスタティックダンスDJやファシリテーターとの↖繋がれるチャンス</List.Item>
+          <List.Item><span className="highlight" style={{ textDecoration: 'underline' }}>メンバー限定イベント割引</span>やその他ボーナス特典をゲットできる</List.Item>
         </List.Root>
+        <Text mb={8}> 　　　　　↖これめちゃくちゃお得です！</Text>
 
         <Image
           mb={8}
@@ -325,7 +301,7 @@ function App() {
         <Text>毎月２回</Text>
 
         <List.Root mb={8}>
-          <List.Item mb={8}>テーマ別クラス６０分（5-10分のシェアタイム含む）
+          <List.Item mb={8}>１.テーマ別クラス６０分
             <List.Root variant="plain">
               <List.Item>（第２金曜20:30-21:30）</List.Item>
               <List.Item>身体の基盤を丁寧に整えながら、毎月テーマに沿って感覚的に踊るステップをガイド♪</List.Item>
@@ -337,11 +313,7 @@ function App() {
             </List.Root>
           </List.Item>
 
-          <Text>２.エクスタティックダンス９０－１２０分</Text>
-          <List.Root variant="plain">
-            <List.Item>【毎月テーマ別】※感覚的に踊るステップを分かりやすく教えていきます</List.Item>
-          </List.Root>
-
+          <Text mb={2}>２.エクスタティックダンス９０－１２０分</Text>
           <List.Root variant="plain">
             <List.Item>（第４日曜20:30-22:30）</List.Item>
             <List.Item>　現場の体験を時空を超えオンラインでも！</List.Item>
@@ -353,10 +325,10 @@ function App() {
         <Text className='highlight'>☝️おススメの流れ</Text>
 
         <Text mb={2}>
-          毎月グループクラスで動きを腑に落としたあと、エクスタティックダンスで唯一無二のダンススタイルを表現する場として活かすことも
+          <strong>基礎＋応用</strong>：グループクラスで動きを身につける
         </Text>
         <Text mb={2}>⇩</Text>
-        <Text mb={8}>実践：エクスタティックダンスで感じていることを表現する場として腑に落としていく</Text>
+        <Text mb={8}><strong>実践</strong>：エクスタティックダンスで感じていることを表現する場として腑に落としていく</Text>
 
         <Image
           mb={8}
@@ -373,9 +345,9 @@ function App() {
           <List.Item>心身を整える術を身につけたい</List.Item>
           <List.Item>頭で考えすぎる癖を手放したい</List.Item>
           <List.Item>感情を身体にため込まずに上手に循環させたい</List.Item>
-          <List.Item>自分軸を取り戻し自由に生きたい</List.Item>
+          <List.Item>必要な発想やインスピレーションが得られる</List.Item>
           <List.Item>自己表現が苦手で自信を持ちたい</List.Item>
-          <List.Item>踊りをセラピーのツールとして使ってみたい</List.Item>
+          <List.Item>輝きと潤いが増し惹きつける存在に</List.Item>
           <List.Item>自己探求に興味はあるけど難しい理論は苦手と感じる</List.Item>
           <List.Item>同じ意識の仲間と繋がりたい</List.Item>
           <List.Item>定期的にメインテナンスしたい</List.Item>
@@ -425,11 +397,12 @@ function App() {
           </List.Root>
 
           <List.Item>【毎月】月のテーマに沿ったメッセージ投稿</List.Item>
-          <List.Item>【不定期】お茶会with EMI ⇨ リラックスしながら胸の内を語り合う交流とサポートの場</List.Item>
+          <List.Item>【ほぼ毎月】ティータイム~緩みながらみんなでキャッチアップ~</List.Item>
           <List.Item>【不定期】ウィメンズサークル~安心して胸の内を語り合う交流とサポートの場~</List.Item>
           <List.Item>【不定期】ゲストライブ~海外エクスタティックダンスコミュニティーのファシリテーターやDJを招いての質問と交流の場~</List.Item>
-          <List.Item>【不定期】エシカル生活役立ち情報 ⇨ ナチュラルレメディー、アロマ/スパセラピストのバックグラウンドを活かした健康と環境に役立つヒントを発信</List.Item>
-          <List.Item>ワークショップ、プログラムを<span className='highlight'>メンバー限定価格</span>で参加・受講可能</List.Item>
+          <List.Item>【不定期】エシカル情報発信 ⇨ 健康と環境に優しい生活役立ちヒント</List.Item>
+          <List.Item>毎月のエクスタティックダンス参加費｜<span className='highlight'>メンバー限定割引</span></List.Item>
+          <List.Item>WSやトレーニングコース｜<span className='highlight'>メンバー限定価格</span>で参加・受講可能</List.Item>
           <List.Item className='highlight'>海外リトリート先行案内＆割引</List.Item>
           <List.Item>個別セッションの優先受付：</List.Item>
           <List.Root variant="plain">
@@ -458,16 +431,33 @@ function App() {
         </Heading>
 
         <List.Root mb={8}>
-          <List.Item>月3300円</List.Item>
-          <Text mb={8}>
-            <Link className='highlight' onClick={() => subscribe('monthly')}>⇨申し込む</Link>
-            （初月無料トライアルつき）
-          </Text>
+          <List.Item>月3300円（初月無料トライアルつき）</List.Item>
+          <Button
+            mb={8}
+            size="lg"
+            target="_blank"
+            colorPalette="orange"
+            width="100%"
+            variant="outline"
+            onClick={() => subscribe('monthly')}
+          >
+            月額費を申し込む
+          </Button>
 
           <List.Item>
             年会費33,000円（初月無料＋その後一括払いで2か月分無料＝<span className='highlight'>計３か月分お得</span>）
-            <Text onClick={() => subscribe('yearly')} className='highlight'><Link>⇨申し込む</Link></Text>
           </List.Item>
+          <Button
+            mb={8}
+            size="lg"
+            target="_blank"
+            colorPalette="orange"
+            width="100%"
+            variant="outline"
+            onClick={() => subscribe('yearly')}
+          >
+            年会費を申し込む
+          </Button>
         </List.Root>
 
         <Separator my={8} />
@@ -510,9 +500,10 @@ function App() {
           参加方法
         </Heading>
 
-        <Text mb={2}>決済完了後、</Text>
-        <Text mb={2}>【STEP 1】Facebookグループへ参加申請をする</Text>
+        <Text mb={2}>【Step 1】ご登録・申込完了</Text>
+        <Text mb={2}>【STEP 2】Facebookグループへ参加申請をする</Text>
         <Text mb={2}>※毎月1日にこちらで参加承認します</Text>
+        <Text mb={2}>※ご登録をお済みでない方は承認できません</Text>
         <Text mb={2} className="highlight">▶&nbsp;
           <Link href="https://www.facebook.com/groups/ecstaticdancetokyoonlinecommunity" target="_blank">Facebookグループ参加リンクはこちら</Link>
         </Text>
@@ -521,7 +512,7 @@ function App() {
           <Link href="https://principled-ethernet-41a.notion.site/Facebook-2e2e7ef4828e808d9314c4f70c006712" target="_blank">新しいアカウント作成方法はこちら</Link>
         </Text>
 
-        <Text mb={2}>【STEP 2】コンテンツ閲覧やダンス/クラスの参加について</Text>
+        <Text mb={2}>【STEP 3】コンテンツ閲覧やダンス/クラスの参加について</Text>
         <Text mb={2}>参加承認後、プライベートグループ内にある投稿やリンクを確認</Text>
         <Text mb={2}>※その月のコンテンツは全て無料でご覧いただけます</Text>
         <Text mb={8}>※オンラインダンスやクラスにも無料トライアル中ご参加いただけます</Text>
@@ -535,18 +526,32 @@ function App() {
 
         <Separator my={8} />
 
-        <List.Root fontSize="2xl" gapY={8} variant="plain" mb={8}>
-          <List.Item className='highlight'>
-            <List.Indicator>👉</List.Indicator>
-            <Link onClick={() => subscribe('monthly')}>月額メンバーシップお申込みの方はこちら</Link>
-          </List.Item>
-          <List.Item className='highlight'>
-            <List.Indicator>👉</List.Indicator>
-            <Link onClick={() => subscribe('yearly')}>一括年会費お申込みの方はこちら</Link>
-          </List.Item>
-        </List.Root>
 
-        <Separator my={8} />
+        <Button
+          mb={8}
+          size="lg"
+          target="_blank"
+          colorPalette="orange"
+          width="100%"
+          variant="outline"
+          onClick={() => subscribe('monthly')}
+        >
+          月額メンバーシップお申込みの方はこちら
+        </Button>
+
+        <Button
+          mb={8}
+          size="lg"
+          target="_blank"
+          colorPalette="orange"
+          width="100%"
+          variant="outline"
+          onClick={() => subscribe('yearly')}
+        >
+          一括年会費お申込みの方はこちら
+        </Button>
+
+        <Separator mb={8} />
 
         <Heading as="h3" size="2xl" mb={8}>
           よくある質問
@@ -597,33 +602,25 @@ function App() {
           ムーブメントファシリテーター・スペースホルダー・セラピスト</Text>
 
         <Text mb={8}>1984年、オランダ生まれニューヨーク育ちの帰国子女。<br />
-          幼い頃から型にはまるのが苦手で、ルールや皆と同じである事に違和感を感じながら過ごす。<br />
-          ２０代で発覚した甲状腺の病気をきっかけに心と身体を整えるように。</Text>
+          幼い頃から型にはまるのが苦手で、ルールや「皆と同じ」に違和感を感じながら過ごす。。<br />
+          20代で発覚した甲状腺の病気をきっかけに心身を整える学びの道へ。</Text>
 
-        <Text mb={8}>2019年、バリ島でエクスタティックダンスと出会い、その時味わった衝撃と解放感により<br />
-          自身の本質が開花したことをきっかけに、エクスタティックダンス東京を立ち上げる。</Text>
+        <Text mb={8}>2019年バリ島でエクスタティックダンスと出会い、その時味わった衝撃と解放による本質の目覚めを機に、エクスタティックダンス東京を立ち上げる。</Text>
 
         <Text mb={8}>身体をツールとし変容を促し本来の自分へと還るためのムーブメントファシリテーション<br />
           を国内外で指導。</Text>
 
         <Text mb={8}>ボディーワーク、プラントメディスン、エネルギーワーク、マインドセットコーチング、ファシリテーション等を総合的に学んでいる。</Text>
 
-        <Text mb={8}>心身を解放し可能性を目覚めさせ、自分らしい人生を切り開くためのサポートやセッション、ワークショップやイベントを開催している。</Text>
+        <Text mb={8}>心身を解放し可能性を開花させ、自分らしい人生を切り開くためのサポートやセッション、ワークショップやイベントを開催。</Text>
 
-        <Text mb={8}>現在は東京とポルトガルを拠点に活動し、日本とポルトガルの架け橋となるようなプロジェクトを始動。</Text>
+        <Text mb={8}>現在は東京とポルトガルを拠点に活動し、両国の架け橋となるプロジェクトを始動中。</Text>
 
         <Separator mb={8} />
 
         <Heading as="h3" size="2xl" mb={8}>
-          <Link href="https://principled-ethernet-41a.notion.site/2dfe7ef4828e804e83a4d9759da5f84d" target="_blank"><LuFile />  特定商取引法に基づく表記</Link>
+          <Link href="https://principled-ethernet-41a.notion.site/2dfe7ef4828e804e83a4d9759da5f84d" target="_blank"> 特定商取引法に基づく表記</Link>
         </Heading>
-
-        <Text>
-          <Link href="https://principled-ethernet-41a.notion.site/2dfe7ef4828e804e83a4d9759da5f84d?pvs=25" target="_blank"><LuFile />  特定商取引法に基づく表記</Link>
-        </Text>
-        <Text>
-          <Link href="https://principled-ethernet-41a.notion.site/Facebook-2e2e7ef4828e808d9314c4f70c006712?pvs=25" target="_blank"><LuFile />  Facebookアカウント作成方法</Link>
-        </Text>
 
       </Container>
     </Provider >
