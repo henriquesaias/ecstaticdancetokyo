@@ -60,10 +60,10 @@ function App() {
     },
     {
       value: "6",
-      question: "EMIさんの世界観や考え方が好きで参加してもいいですか？",
+      question: "スマホでも参加できますか？",
       answer: <>
-        <Text><strong>もちろんです。</strong></Text>
-        <Text>このコミュニティー「自己表現・成長の場」であると同時に、EMIの海外での学びや経験を共有する場でもあります☺</Text>
+        <Text><strong>はい、可能です。</strong></Text>
+        <Text>ただし音量に限界があるため、ブルーツースイヤホンやヘッドフォンがおすすめです。</Text>
       </>
     },
     {
