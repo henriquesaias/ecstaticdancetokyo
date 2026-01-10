@@ -625,6 +625,10 @@ function App() {
           <Link href="https://principled-ethernet-41a.notion.site/2dfe7ef4828e804e83a4d9759da5f84d" target="_blank"> 特定商取引法に基づく表記</Link>
         </Heading>
 
+        <Separator mb={8} />
+
+        <Text mb={8}>© {new Date().getFullYear()} Ecstatic Dance Tokyo</Text>
+
       </Container>
     </Provider >
   );
