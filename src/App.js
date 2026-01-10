@@ -13,6 +13,14 @@ function App() {
   const QAitems = [
     {
       value: "1",
+      question: "実際エクスタティックダンスに参加したことがなくてもコミュニティーに入れますか？",
+      answer: <>
+        <Text><strong>もちろん大丈夫です♪</strong></Text>
+        <Text>初めましての方もレギュラーの方もオンラインで一緒に繋がりましょう☻</Text>
+      </>
+    },
+    {
+      value: "2",
       question: "ダンス経験がなくても参加できますか？",
       answer: <>
         <Text><strong>もちろん大歓迎です！</strong></Text>
@@ -22,7 +30,7 @@ function App() {
       </>
     },
     {
-      value: "2",
+      value: "3",
       question: "顔出しが恥ずかしいので、カメラはオフでもいいですか？",
       answer: <>
         <Text><strong>可能な限りONでお願いしています♪</strong></Text>
@@ -31,27 +39,23 @@ function App() {
       </>
     },
     {
-      value: "3",
+      value: "4",
       question: "自宅が狭くても踊れますか？",
       answer: <>
         <Text><strong>2畳ほどのスペースがあれば十分です！</strong></Text>
       </>
     },
     {
-      value: "4",
+      value: "5",
       question: "途中参加・途中退出はできますか？",
       answer: <>
         <Text><strong> 可能です。</strong></Text>
-        <Text>コンシャスコミュニティーとは、マインドフルなライフスタイルに意識を向ける集団を差し、価値観を共有し、互いに協力し合うことで、意識を高め合ったり、より良い社会の実現を目指します。</Text>
-
-        <List.Root>
-          <List.Item>エクスタティックダンスは流れを大切にしているので、できるだけ時間通りの参加をおすすめしています。</List.Item>
-          <List.Item>グループクラスは初めからのご参加をお願いしています。</List.Item>
-        </List.Root>
+        <Text>エクスタティックダンスは流れを大切にしているので、できるだけ時間通りの参加をおすすめしています。</Text>
+        <Text>グループクラスは初めからのご参加をお願いしています。</Text>
       </>
     },
     {
-      value: "5",
+      value: "6",
       question: " 忙しくて毎回参加できないかもしれません。",
       answer: <>
         <Text><strong>大丈夫です。</strong></Text>
@@ -59,7 +63,7 @@ function App() {
       </>
     },
     {
-      value: "6",
+      value: "7",
       question: "スマホでも参加できますか？",
       answer: <>
         <Text><strong>はい、可能です。</strong></Text>
@@ -67,7 +71,7 @@ function App() {
       </>
     },
     {
-      value: "7",
+      value: "8",
       question: "エクスタティックダンスだけのコミュニティですか？",
       answer: <>
         <Text><strong>エクスタティックダンスを主軸とする、</strong><span className="highlight">コンシャスコミュニティー</span><strong>です。</strong></Text>
@@ -76,7 +80,7 @@ function App() {
       </>
     },
     {
-      value: "8",
+      value: "9",
       question: "ジャーナリングやノートワークは必須ですか？",
       answer: <>
         <Text><strong>必須ではありません。</strong></Text>
@@ -84,7 +88,7 @@ function App() {
       </>
     },
     {
-      value: "9",
+      value: "10",
       question: "EMIさんと交流したいだけの理由で参加してもいいですか？",
       answer: <>
         <Text><strong>もちろんです☻☻</strong></Text>
@@ -92,7 +96,7 @@ function App() {
       </>
     },
     {
-      value: "10",
+      value: "11",
       question: "お茶会やウィメンズサークルでは何をしますか？",
       answer: <>
         <Text><strong>その時集まったメンバーの「今」感じていることを仲間と共有する温かいアットホームな時間です♪</strong></Text>
@@ -102,7 +106,7 @@ function App() {
       </>
     },
     {
-      value: "11",
+      value: "12",
       question: "プライベートレッスンやセッションも月額プランに含まれますか？",
       answer: <>
         <Text><strong>含まれていませんが、<span className='highlight'>優先的</span>に予約を受け付けています♪</strong></Text>
@@ -110,14 +114,14 @@ function App() {
       </>
     },
     {
-      value: "12",
+      value: "13",
       question: "最低どのぐらい続けてみるのがおすすめですか？",
       answer: <>
         <Text>このコミュニティは「一度体験して終わり」ではなく、継続する事で心身に変化が現れ始める３か月がお勧めです。定期的にメンテナンスできる場として是非ご自分のペースで続けてみて下さい♪</Text>
       </>
     },
     {
-      value: "13",
+      value: "14",
       question: "退会する場合の手順を教えて下さい。",
       answer: <>
         <List.Root variant='marker'>
