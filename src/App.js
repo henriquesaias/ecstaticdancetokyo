@@ -287,9 +287,8 @@ function App() {
           <List.Item>グループクラス→エクスタティックダンスの流れで着実な変化がでやすい</List.Item>
           <List.Item>踊りが１回限りの特別な体験から在り方の変化へ</List.Item>
           <List.Item>海外のエクスタティックダンスDJやファシリテーターとの繋がれるチャンス</List.Item>
-          <List.Item><span className="highlight" style={{ textDecoration: 'underline' }}>メンバー限定イベント割引</span>やその他ボーナス特典をゲットできる</List.Item>
+          <List.Item><span className="highlight" style={{ textDecoration: 'underline' }}>メンバー限定イベント割引</span>やその他ボーナス特典をゲットできる(これめちゃくちゃお得です！)</List.Item>
         </List.Root>
-        <Text mb={8}> (これめちゃくちゃお得です！)</Text>
 
         <Image
           mb={8}
