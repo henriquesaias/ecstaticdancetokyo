@@ -35,5 +35,5 @@ a:not(.highlight) {
 
 .hero-banner {
   width: 100vw;
-  max-height: 220px;
+  height: 220px;
 }
