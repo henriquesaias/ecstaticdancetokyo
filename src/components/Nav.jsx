@@ -1,5 +1,5 @@
 import { Link as LLink } from 'react-router-dom'
-import { Box, Button, Container, Image, Flex, ButtonGroup } from '@chakra-ui/react'
+import { Box, Button, Image, Flex, ButtonGroup } from '@chakra-ui/react'
 
 const Nav = () => {
   return (
@@ -30,16 +30,12 @@ const Nav = () => {
         <Box flex="1" />
 
         <ButtonGroup gap={0}>
-          <LLink to="/">
-            <Button variant='subtle'>Home</Button>
-          </LLink>
-          
           <LLink to="/online-community">
-            <Button variant='subtle'>Online</Button>
+            <Button variant='subtle'>コミュニティ</Button>
           </LLink>
 
           <LLink to="/support">
-            <Button variant='subtle'>Support</Button>
+            <Button variant='subtle'>無料相談</Button>
           </LLink>
 
           <LLink>
