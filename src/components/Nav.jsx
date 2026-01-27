@@ -26,20 +26,42 @@ const Nav = () => {
         </LLink>
       </Flex >
 
-      <Flex as="nav" mx="auto" maxW={800} mb={12} position="sticky" top={0} zIndex={1} backgroundColor='bg.muted' borderBottomRadius={18}>
+      <Flex as="nav" mx="auto" maxW={787} mb={12} position="sticky" top={0} zIndex={1} backgroundColor='bg.muted' borderBottomRadius={18} boxShadow='md'>
         <Box flex="1" />
 
         <ButtonGroup gap={0}>
           <LLink to="/online-community">
-            <Button variant='subtle'>コミュニティ</Button>
+            <Button
+              variant='subtle'
+              borderRadius={0}
+              backgroundColor='#f06e06'
+              _hover={{ backgroundColor: '#85340b' }}
+
+            >
+              オンライン
+            </Button>
           </LLink>
 
           <LLink to="/support">
-            <Button variant='subtle'>無料相談</Button>
+            <Button
+              variant='subtle'
+              borderRadius={0}
+              backgroundColor='#d34802'
+              _hover={{ backgroundColor: '#85340b' }}
+            >
+              無料相談
+            </Button>
           </LLink>
 
           <LLink>
-            <Button variant='subtle' onClick={() => window.open('https://ecstaticdancetokyo.peatix.com')}>
+            <Button
+              variant='subtle'
+              borderRadius={0}
+              borderBottomRightRadius={18}
+              backgroundColor='#a72902'
+              _hover={{ backgroundColor: '#85340b' }}
+              onClick={() => window.open('https://ecstaticdancetokyo.peatix.com')}
+            >
               イベント申込み
             </Button>
           </LLink>
