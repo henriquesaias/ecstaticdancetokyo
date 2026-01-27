@@ -30,11 +30,11 @@ const Nav = () => {
         <Box flex="1" />
 
         <ButtonGroup gap={0}>
-          <LLink to="/#/online-community">
+          <LLink to="/online-community">
             <Button variant='subtle'>コミュニティ</Button>
           </LLink>
 
-          <LLink to="/#/support">
+          <LLink to="/support">
             <Button variant='subtle'>無料相談</Button>
           </LLink>
 
