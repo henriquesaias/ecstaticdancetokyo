@@ -114,7 +114,7 @@ const Home = () => {
         mb={8}
         maxH={350}
         mx='auto'
-        src="https://img.notionusercontent.com/s3/prod-files-secure%2Fbeeff5d9-602b-463c-8dee-35d6b9e6c363%2F8f24cbdf-1a06-4ae1-9e8e-8265bf4aa6f8%2F207888_0.jpg/size/w=960?exp=1769366677&sig=lQUVRk3FdtHo9ZERMAlsZ2yNeApus_IVvA9qslsr2cM&id=2f0e7ef4-828e-807c-99e8-d4f54ae0f9be&table=block"
+        src="9.webp"
       />
 
       <Separator mb={8} />
@@ -131,7 +131,7 @@ const Home = () => {
         mb={8}
         maxH={350}
         mx='auto'
-        src="https://img.notionusercontent.com/s3/prod-files-secure%2Fbeeff5d9-602b-463c-8dee-35d6b9e6c363%2F869ee7c6-b11b-48c6-8dde-406f56053e4d%2F210394_0.jpg/size/w=860?exp=1769366755&sig=wZZsvmEGD0UMVNpZnc9KjC1zLGFltXMZ_8uyhDPh02g&id=2f1e7ef4-828e-805b-a4ac-fddea7ee1d7e&table=block"
+        src="10.webp"
       />
 
       <Separator mb={8} />
@@ -151,7 +151,7 @@ const Home = () => {
         mb={8}
         maxH={350}
         mx='auto'
-        src="https://principled-ethernet-41a.notion.site/image/attachment%3A5d9cc44e-c3fe-4c56-b197-d099f0f32b1a%3ALINE_ALBUM_2026.1.16_Extatic_Dance_Tokyo_260118_28.jpg?table=block&id=2f0e7ef4-828e-8048-b0d8-dd052c908e23&spaceId=beeff5d9-602b-463c-8dee-35d6b9e6c363&width=960&userId=&cache=v2"
+        src="1.webp"
       />
 
       <Separator mb={8} />
@@ -172,7 +172,7 @@ const Home = () => {
         mb={8}
         maxH={350}
         mx='auto'
-        src="https://principled-ethernet-41a.notion.site/image/attachment%3A9e32cbe4-3d74-4e97-8d59-8767d00683e6%3A210393_0.jpg?table=block&id=2f1e7ef4-828e-80f2-b28f-e9d3f764f979&spaceId=beeff5d9-602b-463c-8dee-35d6b9e6c363&width=860&userId=&cache=v2"
+        src="2.webp"
       />
 
       <Separator mb={8} />
@@ -208,7 +208,7 @@ const Home = () => {
         mb={8}
         maxH={350}
         mx='auto'
-        src="https://principled-ethernet-41a.notion.site/image/attachment%3A7e24ea1e-3289-4c4a-a62c-9f5fd999c98b%3A210397_0.jpg?table=block&id=2f1e7ef4-828e-80e8-9f2e-cff71359745e&spaceId=beeff5d9-602b-463c-8dee-35d6b9e6c363&width=860&userId=&cache=v2"
+        src="3.webp"
       />
 
       <Separator mb={8} />
@@ -226,7 +226,7 @@ const Home = () => {
         mb={8}
         maxH={350}
         mx='auto'
-        src="https://principled-ethernet-41a.notion.site/image/attachment%3A9d5038d9-7856-4666-bc4e-2183a6d678a2%3ALINE_ALBUM_2026.1.16_Extatic_Dance_Tokyo_260118_1.jpg?table=block&id=2f1e7ef4-828e-80c5-8f32-d28d978bbae1&spaceId=beeff5d9-602b-463c-8dee-35d6b9e6c363&width=580&userId=&cache=v2"
+        src="4.webp"
       />
 
       <Separator mb={8} />
@@ -256,7 +256,7 @@ const Home = () => {
         mb={8}
         maxH={350}
         mx='auto'
-        src="https://principled-ethernet-41a.notion.site/image/attachment%3A8dba0bee-59be-44e6-b624-6803e26043c3%3A207884_0.jpg?table=block&id=2f0e7ef4-828e-8013-862a-f4e565eebbda&spaceId=beeff5d9-602b-463c-8dee-35d6b9e6c363&width=1060&userId=&cache=v2"
+        src="5.webp"
       />
 
       <Separator mb={8} />
@@ -333,7 +333,7 @@ const Home = () => {
         mb={8}
         maxH={350}
         mx='auto'
-        src="https://principled-ethernet-41a.notion.site/image/attachment%3A783543c9-04eb-40e5-b5da-14e49b7ba0a8%3ALINE_ALBUM_2026.1.16_Extatic_Dance_Tokyo_260118_33.jpg?table=block&id=2f0e7ef4-828e-8033-8487-f7bcdcdf01ce&spaceId=beeff5d9-602b-463c-8dee-35d6b9e6c363&width=960&userId=&cache=v2"
+        src="/topbanner.webp"
       />
 
       <Separator mb={8} />
@@ -341,8 +341,8 @@ const Home = () => {
       <Heading as="h4" mb={8}>We look forward to dancing with you all!!</Heading>
 
       <Flex justifyContent="space-evenly" flexWrap="wrap" gap={4} mb={8}>
-        <Image maxH={400} src="https://principled-ethernet-41a.notion.site/image/attachment%3A06df8df2-79ac-4372-83f4-b865a2b22f7b%3A207879_0.jpg?table=block&id=2f2e7ef4-828e-809d-a6b3-c29d04f7dc35&spaceId=beeff5d9-602b-463c-8dee-35d6b9e6c363&width=580&userId=&cache=v2" />
-        <Image maxH={400} src="https://principled-ethernet-41a.notion.site/image/attachment%3A53f9a0d3-0c52-494e-8e19-ed8c08b7373b%3A207880_0.jpg?table=block&id=2f2e7ef4-828e-8065-9e73-cd30d95b3b7d&spaceId=beeff5d9-602b-463c-8dee-35d6b9e6c363&width=580&userId=&cache=v2" />
+        <Image maxH={400} src="/6.webp" />
+        <Image maxH={400} src="/7.webp" />
       </Flex>
     </>
   )

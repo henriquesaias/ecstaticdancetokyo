@@ -145,7 +145,7 @@ const OnlineCommunity = () => {
 
     <Image
       mb={8}
-      src="https://principled-ethernet-41a.notion.site/image/attachment%3Ab6cf9f36-012d-4e02-8dd6-00ea89e7adcd%3Awebsite.png?table=block&id=2d6e7ef4-828e-80dd-ae53-d02e13f9ce93&spaceId=beeff5d9-602b-463c-8dee-35d6b9e6c363&width=1420&userId=&cache=v2"
+      src="11.webp"
     />
 
     <Heading as="h4" size="xl" mb={6}>
@@ -162,7 +162,7 @@ const OnlineCommunity = () => {
 
     <Image
       mb={8}
-      src="https://principled-ethernet-41a.notion.site/image/attachment%3A4968aa97-9fe3-462b-8b4b-e096385c1bb6%3A207887_0.jpg?table=block&id=2c3e7ef4-828e-80be-85fc-f2c2bb5f927f&spaceId=beeff5d9-602b-463c-8dee-35d6b9e6c363&width=1420&userId=&cache=v2"
+      src="12.webp"
     />
 
     <Heading as="h4" size="xl" mb={8} textAlign="center">
@@ -220,8 +220,8 @@ const OnlineCommunity = () => {
     <Text mb={8}>そんな方のために継続的に学び、成長し、高め合うオンラインコミュニティです。</Text>
 
     <Flex justifyContent="space-evenly" flexWrap="wrap" gap={4} mb={8}>
-      <Image maxH={400} src="https://principled-ethernet-41a.notion.site/image/attachment%3A1f50b82e-0654-4d36-86e7-d044e153fd4c%3A207891_0.jpg?table=block&id=2d6e7ef4-828e-8050-931e-e022543943a1&spaceId=beeff5d9-602b-463c-8dee-35d6b9e6c363&width=580&userId=&cache=v2" />
-      <Image maxH={400} src="https://principled-ethernet-41a.notion.site/image/attachment%3A4f4b3953-8416-4a16-a826-b414d01713e5%3A194386_0.jpg?table=block&id=2d6e7ef4-828e-8044-bff0-e133088bedb0&spaceId=beeff5d9-602b-463c-8dee-35d6b9e6c363&width=580&userId=&cache=v2" />
+      <Image maxH={400} src="13.webp" />
+      <Image maxH={400} src="14.webp" />
     </Flex>
 
     <Heading as="h3" size="2xl" fontWeight="800" mb={8}>継続することで何が起こる？</Heading>
@@ -265,7 +265,7 @@ const OnlineCommunity = () => {
       mb={8}
       mx="auto"
       maxH={400}
-      src="https://principled-ethernet-41a.notion.site/image/attachment%3A4382014d-e1e4-4771-b5d7-dc1e54cf7556%3AS__105234446_0.jpg?table=block&id=2dde7ef4-828e-809d-ac44-c453ae0a5e3c&spaceId=beeff5d9-602b-463c-8dee-35d6b9e6c363&width=580&userId=&cache=v2"
+      src="15.webp"
     />
 
     <Separator mb={8} />
@@ -308,7 +308,7 @@ const OnlineCommunity = () => {
       mb={8}
       mx="auto"
       maxWidth={400}
-      src="https://principled-ethernet-41a.notion.site/image/attachment%3A3e9b59a6-bd4e-43b0-b23f-57b5fdd599e3%3A207884_0.jpg?table=block&id=2dde7ef4-828e-8049-81d0-ca3eedfac84d&spaceId=beeff5d9-602b-463c-8dee-35d6b9e6c363&width=860&userId=&cache=v2"
+      src="16.webp"
     />
 
     <Separator mb={8} />
@@ -330,7 +330,7 @@ const OnlineCommunity = () => {
 
     <Image
       mb={8}
-      src="https://principled-ethernet-41a.notion.site/image/attachment%3A89420e1a-0361-429c-9a09-5b4ff10e1dbe%3A207886_0.jpg?table=block&id=2c3e7ef4-828e-80f5-8be4-c2ecd5ed641a&spaceId=beeff5d9-602b-463c-8dee-35d6b9e6c363&width=1420&userId=&cache=v2"
+      src="17.webp"
     />
 
     <Separator mb={8} />
@@ -350,7 +350,7 @@ const OnlineCommunity = () => {
 
     <Image
       mb={8}
-      src="https://principled-ethernet-41a.notion.site/image/attachment%3Af3beea9a-c8ab-4d69-a98c-ec73ba60b616%3A207885_0.jpg?table=block&id=2d6e7ef4-828e-80ab-85d5-e8503e6aa4e0&spaceId=beeff5d9-602b-463c-8dee-35d6b9e6c363&width=1340&userId=&cache=v2"
+      src="18.webp"
     />
 
     <Separator mb={8} />
@@ -565,7 +565,7 @@ const OnlineCommunity = () => {
       mx="auto"
       maxW={400}
       mb={8}
-      src="https://principled-ethernet-41a.notion.site/image/attachment%3A04a34a27-3e4b-4e26-b8ed-84f005b456bd%3Ab2c933b6-75a9-4734-9f73-a20bbd883346.png?table=block&id=2cae7ef4-828e-802d-903d-d58bd93a09c9&spaceId=beeff5d9-602b-463c-8dee-35d6b9e6c363&width=860&userId=&cache=v2"
+      src="19.webp"
     />
 
     <Heading as="h4" size="xl" mb={4} textTransform="uppercase" fontStyle='italic' fontWeight="bold">

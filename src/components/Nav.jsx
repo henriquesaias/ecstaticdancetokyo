@@ -6,7 +6,7 @@ const Nav = () => {
     <>
       <Image
         alt="Banner image"
-        src="https://principled-ethernet-41a.notion.site/image/attachment%3Aca0493df-dcbc-41d1-bc7c-910b6f844523%3Aecstatic_dance_for_notion.png?table=block&id=2c3e7ef4-828e-80d1-b00d-c1d0626cd762&spaceId=beeff5d9-602b-463c-8dee-35d6b9e6c363&width=1920&userId=&cache=v2"
+        src="topbanner.webp"
         className='hero-banner'
       />
 

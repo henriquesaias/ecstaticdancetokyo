@@ -27,7 +27,7 @@ const Support = () => {
         mb={8}
         maxH={350}
         mx='auto'
-        src="https://img.notionusercontent.com/s3/prod-files-secure%2Fbeeff5d9-602b-463c-8dee-35d6b9e6c363%2F605605d8-8384-433c-96b0-08691e62510f%2FLINE_ALBUM_2026.1.16_Extatic_Dance_Tokyo_260118_33.jpg/size/w=1050?exp=1769279860&sig=qC0ucjXJHkCr0RT_XO66cfb3FYQfhXGWmyO2PdY6qug&id=2efe7ef4-828e-8056-aca9-e0d32ee6ea88&table=block&userId=50171a16-6770-40e5-bfc8-29c3fdc0b85e"
+        src="topbanner.webp"
       />
 
       <Separator mb={8} />
@@ -73,7 +73,7 @@ const Support = () => {
         mb={8}
         maxW={350}
         mx='auto'
-        src="https://img.notionusercontent.com/s3/prod-files-secure%2Fbeeff5d9-602b-463c-8dee-35d6b9e6c363%2F6c620121-ffd0-4eea-9b0b-954fe6c3a935%2FLINE_ALBUM_2026.1.16_Extatic_Dance_Tokyo_260118_16.jpg/size/w=580?exp=1769280333&sig=SfOVuJtIOaE1u5N3_7HXjrVwOrJW2mrZQePzxhlucVk&id=2efe7ef4-828e-80bc-ab29-f67e93fd7aa4&table=block&userId=50171a16-6770-40e5-bfc8-29c3fdc0b85e"
+        src="8.webp"
       />
 
       <Separator mb={8} />
