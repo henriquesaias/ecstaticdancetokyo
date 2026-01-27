@@ -1,5 +1,5 @@
 import { useEffect } from "react"
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import { HashRouter as Router, Route, Routes } from 'react-router-dom'
 import { Container } from '@chakra-ui/react'
 import { Provider } from "./components/ui/provider"
 import Nav from './components/Nav'
@@ -16,7 +16,7 @@ function App() {
   }, [window.location.hash]);
 
   return (
-    <BrowserRouter>
+    <Router>
       <Provider>
 
         <Nav />
@@ -32,7 +32,7 @@ function App() {
 
         </Container>
       </Provider >
-    </BrowserRouter>
+    </Router>
   );
 }
 
