@@ -14,6 +14,8 @@ function App() {
   useEffect(() => {
     if (window.location.hash === '#subscribe_successful') {
       setShowMessage(true)
+    } else {
+      setShowMessage(false)
     }
   }, [window.location.hash])
 
