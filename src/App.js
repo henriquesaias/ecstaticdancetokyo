@@ -1,4 +1,4 @@
-import { useEffect } from "react"
+import { useState, useEffect } from "react"
 import { HashRouter as Router, Route, Routes } from 'react-router-dom'
 import { Container } from '@chakra-ui/react'
 import { Provider } from "./components/ui/provider"
@@ -9,11 +9,13 @@ import OnlineCommunity from "./pages/online-community"
 import Support from "./pages/support"
 
 function App() {
+  const [showMessage, setShowMessage] = useState(false)
+
   useEffect(() => {
-    if (window.location.hash === "#subscribe_successful") {
-      console.log("Add a success message");
+    if (window.location.hash === '#subscribe_successful') {
+      setShowMessage(true)
     }
-  }, [window.location.hash]);
+  }, [window.location.hash])
 
   return (
     <Router>
@@ -22,6 +24,23 @@ function App() {
         <Nav />
 
         <Container mx="auto" maxW={800} minH='100vh' pb={8}>
+          {showMessage && (
+            <div
+              style={{
+                color: '#d4edda',
+                fontWeight: 'bold',
+                textAlign: 'center',
+                padding: '1rem',
+                borderRadius: '6px',
+                margin: '2rem auto',
+                maxWidth: '600px'
+              }}
+            >
+              ご登録ありがとうございます！🎉<br />
+              ご入力いただいたメールアドレスに、今後の手順や参加情報を送信しました。
+              メールをご確認ください。
+            </div>
+          )}
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/online-community" element={<OnlineCommunity />} />
