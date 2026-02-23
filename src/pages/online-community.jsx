@@ -542,6 +542,18 @@ const OnlineCommunity = () => {
       >
         年会費を申し込む
       </Button>
+
+      <Button
+        mb={8}
+        size="lg"
+        target="_blank"
+        colorPalette="orange"
+        width="100%"
+        variant="outline"
+        onClick={() => window.open('https://buy.stripe.com/eVqbJ25G54Qlaey5RL4F204', '_blank')}
+      >
+        再入会（月額・無料トライアルなし）
+      </Button>
     </List.Root>
 
     <Separator my={8} />
@@ -603,6 +615,18 @@ const OnlineCommunity = () => {
       onClick={() => subscribe('yearly')}
     >
       一括年会費お申込みの方はこちら
+    </Button>
+
+    <Button
+      mb={8}
+      size="lg"
+      target="_blank"
+      colorPalette="orange"
+      width="100%"
+      variant="outline"
+      onClick={() => window.open('https://buy.stripe.com/eVqbJ25G54Qlaey5RL4F204', '_blank')}
+    >
+      再入会（月額・無料トライアルなし）
     </Button>
 
     <Separator mb={8} />
