@@ -1,5 +1,6 @@
-import { Accordion, AspectRatio, Heading, Image, Flex, Button, Separator, Text, Span, List, Link } from '@chakra-ui/react'
+import { Accordion, AspectRatio, Heading, Image, Flex, Button, Separator, Text, Span, List, Link, Box } from '@chakra-ui/react'
 import { subscribe } from '../utils/subscribe'
+import { keyframes } from '@emotion/react'  // for neon animation
 
 const QAitems = [
   {
@@ -124,7 +125,114 @@ const QAitems = [
 ]
 
 const OnlineCommunity = () => {
+
+  const neonBlink = keyframes`
+    0%,100% { box-shadow: 0 0 6px rgba(255,165,0,0.4); border-color: rgba(255,165,0,0.6); }
+    50% { box-shadow: 0 0 18px rgba(255,165,0,0.9); border-color: rgba(255,165,0,1); }
+  `;
+
   return (<>
+    {/* 新着アップデートカード */}
+    {/* box for update card with neon animation */}
+    <Box
+      my={12}
+      p={6}
+      border="2px solid"
+      borderColor="orange.500"
+      borderRadius="md"
+      bgGradient="radial(circle at top center, orange.100, orange.50)"
+      position="relative"
+      // create a keyframe using emotion
+      animation={`${neonBlink} 1.5s infinite`}
+      _before={{
+        content: '""',
+        position: 'absolute',
+        top: '-4px',
+        left: '-4px',
+        right: '-4px',
+        bottom: '-4px',
+        border: '2px solid',
+        borderColor: 'orange.500',
+        borderRadius: 'md',
+        animation: `${neonBlink} 1.5s infinite`,
+      }}
+      _after={{
+        content: '""',
+        position: 'absolute',
+        top: '-8px',
+        left: '-8px',
+        right: '-8px',
+        bottom: '-8px',
+        border: '2px solid',
+        borderColor: 'orange.300',
+        borderRadius: 'md',
+        animation: `${neonBlink} 1.5s infinite`,
+        zIndex: -1
+      }}
+    >
+
+      <Heading as="h3" size="2xl" mb={6} borderBottom="2px solid #f06e06" className="highlight">
+        💌 新しいお知らせ 💌
+      </Heading>
+      <Text mb={4}><span className="highlight">単発</span>でのご参加チケットが購入可能になりました！</Text>
+      <Flex direction="column" gap={4} mb={6}>
+        <Button
+          size="lg"
+          target="_blank"
+          colorPalette="orange"
+          width="100%"
+          variant="outline"
+          onClick={() => window.open('https://buy.stripe.com/fZu3cw4C1dmRbiCbc54F206', '_blank')}
+        >
+          オンラインエクスタティックダンス 1回券を購入
+        </Button>
+        <Button
+          size="lg"
+          target="_blank"
+          colorPalette="orange"
+          width="100%"
+          variant="outline"
+          onClick={() => window.open('https://buy.stripe.com/aFa4gA6K996BdqKcg94F205', '_blank')}
+        >
+          オンライングループムーブメントクラス 1回券を購入
+        </Button>
+      </Flex>
+
+      <Text fontWeight="bold" mb={2}>サブスクリプションプラン</Text>
+      <Flex direction="column" gap={4}>
+        <Button
+          size="lg"
+          target="_blank"
+          colorPalette="orange"
+          width="100%"
+          variant="outline"
+          onClick={() => subscribe('monthly')}
+        >
+          月額（初月無料）
+        </Button>
+        <Button
+          size="lg"
+          target="_blank"
+          colorPalette="orange"
+          width="100%"
+          variant="outline"
+          onClick={() => subscribe('yearly')}
+        >
+          年額（初月無料）
+        </Button>
+        <Button
+          size="lg"
+          target="_blank"
+          colorPalette="orange"
+          width="100%"
+          variant="outline"
+          onClick={() => window.open('https://buy.stripe.com/eVqbJ25G54Qlaey5RL4F204', '_blank')}
+        >
+          再入会（月額・無料トライアルなし）
+        </Button>
+      </Flex>
+    </Box>
+
     <Heading className='highlight' as="h4" size="xl" mb={2}>
       2026年2月2日オープン！1月11日募集開始
     </Heading>
