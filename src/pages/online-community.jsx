@@ -469,7 +469,7 @@ const OnlineCommunity = () => {
 
     <List.Root>
       <List.Item>【毎月】６０分のグループクラス（第２金曜20:30-21:30）</List.Item>
-      <List.Item>【毎月】１２０分のオンライン上のエクスタティックダンス（第４日曜20:30-22:30）</List.Item>
+      <List.Item>【毎月】１２０分のオンライン上のエクスタティックダンス（第４水曜20:30-22:30）</List.Item>
     </List.Root>
     <Text className='highlight' mb={".5em"}> - ボーナス特典 -</Text>
     <List.Root mb={8}>
@@ -506,7 +506,7 @@ const OnlineCommunity = () => {
     <Text mb={8}>　毎月第２日曜日　20:30-21:30</Text>
 
     <Text mb={2}>〇エクスタティックダンス　</Text>
-    <Text>　毎月第４金曜日　20:30-22:30</Text>
+    <Text>　毎月第４水曜日　20:30-22:30</Text>
 
     <Separator my={8} />
 
