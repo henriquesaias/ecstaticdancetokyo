@@ -368,7 +368,7 @@ const OnlineCommunity = () => {
       <List.Item>グループクラス→エクスタティックダンスの流れで着実な変化がでやすい</List.Item>
       <List.Item>踊りが１回限りの特別な体験から在り方の変化へ</List.Item>
       <List.Item>海外のエクスタティックダンスDJやファシリテーターとの繋がれるチャンス</List.Item>
-      <List.Item><span className="highlight" style={{ textDecoration: 'underline' }}>メンバー限定イベント割引</span>やその他ボーナス特典をゲットできる(これめちゃくちゃお得です！)</List.Item>
+      <List.Item><span className="highlight" style={{ textDecoration: 'underline' }}>メンバー限定イベント割引</span>やその他ボーナス特典をゲットできる(これお得です！)</List.Item>
     </List.Root>
 
     <Image
@@ -385,7 +385,7 @@ const OnlineCommunity = () => {
     <Text>毎月２回</Text>
 
     <List.Root mb={8}>
-      <List.Item mb={8}><strong>１.テーマ別クラス６０分</strong>
+      <List.Item mb={8}><strong>１.テーマ別グループクラス６０分</strong>
         <List.Root variant="plain">
           <List.Item>（第２金曜20:30-21:30）</List.Item>
           <List.Item>身体の基盤を丁寧に整えながら、毎月テーマに沿って感覚的に踊るステップをガイド♪</List.Item>
@@ -399,7 +399,7 @@ const OnlineCommunity = () => {
 
       <Text mb={2}><strong>２.エクスタティックダンス９０－１２０分</strong></Text>
       <List.Root variant="plain">
-        <List.Item>（第４日曜20:30-22:30）</List.Item>
+        <List.Item>（第４水曜20:30-22:30）</List.Item>
         <List.Item>　現場の体験を時空を超えオンラインでも！</List.Item>
         <List.Item>　〇新しい月に入る前の月末リセットタイム</List.Item>
         <List.Item>　〇滞ったエネルギーの循環＋活性に最適</List.Item>
