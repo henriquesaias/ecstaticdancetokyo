@@ -135,6 +135,8 @@ const OnlineCommunity = () => {
     {/* 新着アップデートカード */}
     {/* box for update card with neon animation */}
     <Box
+      maxWidth="lg"
+      mx="auto"
       my={12}
       p={6}
       border="2px solid"
