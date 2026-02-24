@@ -186,7 +186,7 @@ const OnlineCommunity = () => {
           variant="outline"
           onClick={() => window.open('https://buy.stripe.com/fZu3cw4C1dmRbiCbc54F206', '_blank')}
         >
-          オンラインエクスタティックダンス 1回券を購入
+          エクスタティックダンス 1回券を購入
         </Button>
         <Button
           size="lg"
@@ -196,7 +196,7 @@ const OnlineCommunity = () => {
           variant="outline"
           onClick={() => window.open('https://buy.stripe.com/aFa4gA6K996BdqKcg94F205', '_blank')}
         >
-          オンライングループムーブメントクラス 1回券を購入
+          グループムーブメントクラス 1回券を購入
         </Button>
       </Flex>
 
