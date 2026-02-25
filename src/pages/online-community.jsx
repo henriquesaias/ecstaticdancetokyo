@@ -495,8 +495,8 @@ const OnlineCommunity = () => {
       </List.Root>
     </List.Root>
 
-    <Text>※ダンス/クラスは30日間アーカイブ残ります</Text>
-    <Text>※特典はアーカイブがずっと残ります</Text>
+    <Text>※ダンス/クラスのアーカイブ残ります</Text>
+    <Text>※特典もアーカイブ残ります</Text>
 
     <Separator my={8} />
 
@@ -570,43 +570,13 @@ const OnlineCommunity = () => {
     </Heading>
 
     <List.Root mb={8}>
-      <List.Item>月額費は毎月1日に自動引き落としとなります。</List.Item>
-      <List.Item>月のどのタイミングでご購入いただいても、グループへの承認は毎月１日、そこから３０日間は無料トライアル期間となり、料金は発生しません。</List.Item>
-      <List.Item>無料トライアル終了後、キャンセルしない限り翌月1日より毎月自動的に課金されます。</List.Item>
+      <List.Item>月額費は決済完了した日から３０日後に自動引き落としとなります。</List.Item>
+      <List.Item>３０日間の無料トライアル期間中は、料金は一切発生しません。</List.Item>
+      <List.Item>お客様ご自身でキャンセルしない限り毎月自動的に課金されます。</List.Item>
     </List.Root>
 
     <Text mb={2}>月額プランを購入した場合の例：</Text>
-    <Text>1月中にご購入 → 2月1日より無料トライアル開始→ 3月1日より自動引き落とし</Text>
-
-    <Separator my={8} />
-
-    <Heading as="h3" size="2xl" mb={8}>
-      参加方法
-    </Heading>
-
-    <Text mb={2}>【Step 1】ご登録・申込完了</Text>
-    <Text mb={2}>【STEP 2】Facebookグループへ参加申請をする</Text>
-    <Text mb={2}>※毎月1日にこちらで参加承認します</Text>
-    <Text mb={2}>※ご登録をお済みでない方は承認できません</Text>
-    <Text mb={2} className="highlight">▶&nbsp;
-      <Link href="https://www.facebook.com/groups/ecstaticdancetokyoonlinecommunity" target="_blank">Facebookグループ参加リンクはこちら</Link>
-    </Text>
-    <Text mb={2}>アカウントがない方は開設をお願いします</Text>
-    <Text mb={8}>
-      <Link href="https://principled-ethernet-41a.notion.site/Facebook-2e2e7ef4828e808d9314c4f70c006712" target="_blank">新しいアカウント作成方法はこちら</Link>
-    </Text>
-
-    <Text mb={2}>【STEP 3】コンテンツ閲覧やダンス/クラスの参加について</Text>
-    <Text mb={2}>参加承認後、プライベートグループ内にある投稿やリンクを確認</Text>
-    <Text mb={2}>※その月のコンテンツは全て無料でご覧いただけます</Text>
-    <Text mb={8}>※オンラインダンスやクラスにも無料トライアル中ご参加いただけます</Text>
-
-    <Text mb={2}>【お支払いについてのご案内】</Text>
-    <List.Root mb={8}>
-      <List.Item>初月無料なのでトライアル終了後、翌月１日から引き落としが始まります</List.Item>
-      <List.Item>以降毎月1日に自動的に引き落としが行われます</List.Item>
-      <List.Item>無料トライアル期間中にキャンセルされた場合、料金は発生しません</List.Item>
-    </List.Root>
+    <Text>2月2日にご購入 → 2月2日より無料トライアル開始→ 3月4日より自動引き落とし</Text>
 
     <Separator my={8} />
 
