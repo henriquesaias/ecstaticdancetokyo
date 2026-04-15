@@ -184,7 +184,7 @@ const OnlineCommunity = () => {
           colorPalette="orange"
           width="100%"
           variant="outline"
-          onClick={() => window.open('https://buy.stripe.com/fZu3cw4C1dmRbiCbc54F206', '_blank')}
+          onClick={() => window.open('https://buy.stripe.com/7sY9AU8ShciNbiC1Bv4F20e', '_blank')}
         >
           エクスタティックダンス 1回券を購入
         </Button>
@@ -194,7 +194,7 @@ const OnlineCommunity = () => {
           colorPalette="orange"
           width="100%"
           variant="outline"
-          onClick={() => window.open('https://buy.stripe.com/aFa4gA6K996BdqKcg94F205', '_blank')}
+          onClick={() => window.open('https://buy.stripe.com/6oU4gA9WleqV86q5RL4F20d', '_blank')}
         >
           グループムーブメントクラス 1回券を購入
         </Button>
