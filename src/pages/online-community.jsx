@@ -588,7 +588,7 @@ const OnlineCommunity = () => {
     </List.Root>
 
     <Text mb={2}>月額プランを購入した場合の例：</Text>
-    <Text>2月2日にご購入 → 2月2日より無料トライアル開始→ 3月4日より自動引き落とし</Text>
+    <Text>2月2日にご購入 → 2月2日より無料トライアル開始→ 30日後の3月4日より自動引き落とし</Text>
 
     <Separator my={8} />
 
