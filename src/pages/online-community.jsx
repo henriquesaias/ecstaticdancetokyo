@@ -41,8 +41,8 @@ const QAitems = [
     value: "5",
     question: "途中参加・途中退出はできますか？",
     answer: <>
-      <Text><strong> 可能です。</strong></Text>
-      <Text>エクスタティックダンスは流れを大切にしているので、できるだけ時間通りの参加をおすすめしています。</Text>
+      <Text><strong> 可能ですが出来る限り時間通りの参加をお願いしてます。</strong></Text>
+      <Text>特にエクスタティックダンスは流れを大切にしているので、時間通りの参加をおすすめしています。</Text>
       <Text>グループクラスは初めからのご参加をお願いしています。</Text>
     </>
   },
@@ -236,7 +236,7 @@ const OnlineCommunity = () => {
     </Box>
 
     <Heading className='highlight' as="h4" size="xl" mb={2}>
-      2026年2月2日オープン！1月11日募集開始
+      2026年2月2日オープン！1月11日募集開始。
     </Heading>
     <Text mb={2} className='highlight'>ただいま初期メンバー募集中</Text>
     <Text mb={8} className='highlight'>初月は無料でご参加いただけます♪</Text>
@@ -495,7 +495,7 @@ const OnlineCommunity = () => {
       </List.Root>
     </List.Root>
 
-    <Text>※ダンス/クラスのアーカイブ残ります</Text>
+    <Text>※ダンス/クラスのアーカイブ30日間残ります</Text>
     <Text>※特典もアーカイブ残ります</Text>
 
     <Separator my={8} />
@@ -503,7 +503,7 @@ const OnlineCommunity = () => {
     <Heading as="h3" size="2xl" mb={8}>開催日時</Heading>
 
     <Text mb={2}>〇グループクラス　</Text>
-    <Text mb={8}>　毎月第２日曜日　20:30-21:30</Text>
+    <Text mb={8}>　毎月第２金曜日　20:30-21:30</Text>
 
     <Text mb={2}>〇エクスタティックダンス　</Text>
     <Text>　毎月第４水曜日　20:30-22:30</Text>
