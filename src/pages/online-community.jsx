@@ -109,7 +109,7 @@ const QAitems = [
     value: "13",
     question: "最低どのぐらい続けてみるのがおすすめですか？",
     answer: <>
-      <Text>このコミュニティは「一度体験して終わり」ではなく、継続する事で心身に変化が現れ始める３か月がお勧めです。定期的にメンテナンスできる場として是非ご自分のペースで続けてみて下さい♪</Text>
+      <Text>このコミュニティは「一度体験して終わり」ではなく、継続する事で心身に変化が現れ始める３か月から半年がお勧めです。定期的にメンテナンスできる場として是非ご自分のペースで続けてみて下さい♪</Text>
     </>
   },
   {
@@ -238,7 +238,7 @@ const OnlineCommunity = () => {
     <Heading className='highlight' as="h4" size="xl" mb={2}>
       2026年2月2日オープン！1月11日募集開始。
     </Heading>
-    <Text mb={2} className='highlight'>ただいま初期メンバー募集中</Text>
+    <Text mb={2} className='highlight'>ただいま初期メンバー募集中・いつでも入会OK</Text>
     <Text mb={8} className='highlight'>初月は無料でご参加いただけます♪</Text>
 
     <Heading as="h4" size="xl" mb={8}>
@@ -316,7 +316,7 @@ const OnlineCommunity = () => {
     </Text>
 
     <Text mb={8}>
-      エクスタティックダンス東京主宰・ファシリテーター EMI のダンス/ムーブメント/マッサージのバックグラウンドや海外経験をベースに、<span className='highlight'>身体を癒しと変容のツール</span>として使う感覚を育み、心と身体の両方を整えていく<span className='highlight'>実践型・体感型のコミュニティ</span>です。
+      エクスタティックダンス東京主宰・ファシリテーター EMI のダンス/コンシャスムーブメント/セラピストのバックグラウンドや海外経験をベースに、<span className='highlight'>身体を癒しと変容のツール</span>として使う感覚を育み、心と身体の両方を整えていく<span className='highlight'>実践型・体感型のコミュニティ</span>です。
     </Text>
 
     <List.Root mb={8} variant="plain">
