@@ -6,6 +6,7 @@ import Footer from './components/Footer'
 import Home from './pages/index'
 import OnlineCommunity from "./pages/online-community"
 import Support from "./pages/support"
+import LessonArchive from './pages/lesson-archive'
 import SubscribeMessage from './components/SuccessMessage'
 
 function App() {
@@ -21,6 +22,7 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/online-community" element={<OnlineCommunity />} />
             <Route path="/support" element={<Support />} />
+            <Route path="/lessons" element={<LessonArchive />} />
           </Routes>
 
           <Footer />

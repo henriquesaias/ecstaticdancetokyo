@@ -1,4 +1,74 @@
-# Getting Started with Create React App
+# Ecstatic Dance Tokyo
+
+## Online Lesson Archive (Cloudflare Worker + DO Spaces + Stripe)
+
+This repository now includes a secure archive flow for online lessons with these guarantees:
+
+- Video is requested by URL param on the frontend (`/#/lessons?video=...`).
+- User must enter an email.
+- Worker verifies that email belongs to a Stripe customer with an active subscription whose product metadata grants access to the requested video.
+- Worker sends a one-time verification link by email.
+- Only after clicking that link does the app receive a short-lived session token.
+- Video is streamed through the Worker (not directly exposed), and every stream request validates the session.
+
+### Frontend changes
+
+- New page: `src/pages/lesson-archive.jsx`
+- New utility: `src/utils/lessonAccess.js`
+- New route: `/lessons`
+
+Set this environment variable for the React app:
+
+```
+REACT_APP_LESSON_ACCESS_API_BASE_URL=https://your-lesson-access-worker.workers.dev
+```
+
+### Worker project
+
+Worker implementation and setup live in:
+
+- `workers/lesson-access/src/index.js`
+- `workers/lesson-access/schema.sql`
+- `workers/lesson-access/wrangler.toml.example`
+
+Quick start:
+
+1. `cd workers/lesson-access`
+2. `npm install`
+3. Create D1 DB and bind it in `wrangler.toml`.
+4. Apply schema: `wrangler d1 execute lesson-access --file=./schema.sql`
+5. Configure vars in `wrangler.toml` and secrets with `wrangler secret put`.
+6. Deploy: `npm run deploy`
+
+Required Worker secrets:
+
+- `STRIPE_SECRET_KEY`
+- `RESEND_API_KEY`
+- `EMAIL_FROM`
+- `SESSION_SIGNING_SECRET`
+- `DO_SPACES_KEY`
+- `DO_SPACES_SECRET`
+
+Important vars (non-secret):
+
+- `PUBLIC_APP_ARCHIVE_URL` (for verification link target)
+- `DO_SPACES_ENDPOINT` (for example `https://nyc3.digitaloceanspaces.com`)
+- `DO_SPACES_REGION` (for example `nyc3`)
+- `DO_SPACES_BUCKET`
+- `DO_SPACES_PREFIX` (folder where videos are stored)
+
+Stripe Dashboard metadata rules (set on each Product):
+
+- `access_all=true` grants access to all videos.
+- `access_videos=video-a.mp4,course1/lesson-2.mp4` grants exact video access.
+- `access_prefixes=course1/,membership/may/` grants access by video key prefix.
+
+Notes:
+
+- `DO_SPACES_KEY` should be your DigitalOcean Spaces access key ID (not the secret).
+- Video values should match the same `video` query value used in `/#/lessons?video=...`.
+
+## Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
