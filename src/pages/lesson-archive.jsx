@@ -51,18 +51,18 @@ const LessonArchive = () => {
       }
 
       setStatusError('');
-      setStatusMessage('Verifying your email...');
+      setStatusMessage('メールを確認しています...');
       setIsVerifying(true);
 
       try {
         const data = await verifyEmailToken({ token: emailToken, video });
         if (!ignore) {
           setSessionToken(data.sessionToken);
-          setStatusMessage('Email verified. Your lesson is now unlocked.');
+          setStatusMessage('メールが確認されました。このレッスンのロックが解除されました。');
         }
       } catch (err) {
         if (!ignore) {
-          setStatusError(err.message || 'Email verification failed.');
+          setStatusError(err.message || 'メールの確認に失敗しました。');
           setStatusMessage('');
         }
       } finally {
@@ -85,20 +85,20 @@ const LessonArchive = () => {
     const normalizedEmail = email.trim().toLowerCase();
 
     if (!video) {
-      setStatusError('Missing video id in URL. Add ?video=your-video-slug');
+      setStatusError('URLに動画IDがありません。?video=your-video-slug を追加してください');
       setStatusMessage('');
       return;
     }
 
     if (!isValidEmail(normalizedEmail)) {
-      setStatusError('Please enter a valid email address.');
+      setStatusError('有効なメールアドレスを入力してください。');
       setStatusMessage('');
       return;
     }
 
     setIsSubmitting(true);
     setStatusError('');
-    setStatusMessage('Checking access and sending your verification link...');
+    setStatusMessage('アクセスを確認し、認証リンクを送信しています...');
 
     try {
       await requestEmailVerification({
@@ -106,9 +106,9 @@ const LessonArchive = () => {
         video,
       });
 
-      setStatusMessage('Check your inbox and click the link to unlock this lesson. If you do not see it, check your spam or promotions folder.');
+      setStatusMessage('受信トレイを確認し、リンクをクリックしてこのレッスンを解除してください。見当たらない場合は、迷惑メールやプロモーションフォルダも確認してください。');
     } catch (err) {
-      setStatusError(err.message || 'Could not send verification email.');
+      setStatusError(err.message || '認証メールを送信できませんでした。');
       setStatusMessage('');
     } finally {
       setIsSubmitting(false);
@@ -117,18 +117,18 @@ const LessonArchive = () => {
 
   return (
     <Box>
-      <Heading as="h2" mb={3}>Online Lesson Archive</Heading>
+      <Heading as="h2" mb={3}>オンラインレッスンアーカイブ</Heading>
       <Text mb={8}>
-        Enter your subscription email to receive a secure login link for this lesson.
+        サブスクリプションに登録したメールアドレスを入力すると、このレッスン用の安全なログインリンクが送信されます。
       </Text>
 
       {!video && (
         <Alert.Root status="warning" mb={8}>
           <Alert.Indicator />
           <Alert.Content>
-            <Alert.Title>Video parameter is required</Alert.Title>
+            <Alert.Title>動画パラメータが必要です</Alert.Title>
             <Alert.Description>
-              Open this page with a URL like /#/lessons?video=breathwork-2026-05-01
+              /#/lessons?video=breathwork-2026-05-01 のようなURLでこのページを開いてください
             </Alert.Description>
           </Alert.Content>
         </Alert.Root>
@@ -137,10 +137,10 @@ const LessonArchive = () => {
       {video && !sessionToken && (
         <Box as="form" onSubmit={onRequestLink} mb={8}>
           <VStack align="stretch" gap={4}>
-            <Text fontWeight="bold">Requested lesson: {video}</Text>
+            <Text fontWeight="bold">リクエストされたレッスン: {video}</Text>
 
             <Field.Root required>
-              <Field.Label>Email address</Field.Label>
+              <Field.Label>メールアドレス</Field.Label>
               <Input
                 value={email}
                 onChange={(event) => setEmail(event.target.value)}
@@ -156,7 +156,7 @@ const LessonArchive = () => {
               loading={isSubmitting}
               disabled={isVerifying}
             >
-              Send verification email
+              認証メールを送信
             </Button>
           </VStack>
         </Box>
@@ -166,10 +166,10 @@ const LessonArchive = () => {
         <Alert.Root status="info" mb={6}>
           <Alert.Indicator />
           <Alert.Content>
-            <Alert.Title>Access flow update</Alert.Title>
+            <Alert.Title>アクセス状況の更新</Alert.Title>
             <Alert.Description display="flex" alignItems="center" gap={2}>
               {isVerifying && <Spinner size="sm" />}
-              {statusMessage || 'Working...'}
+              {statusMessage || '処理中...'}
             </Alert.Description>
           </Alert.Content>
         </Alert.Root>
@@ -179,7 +179,7 @@ const LessonArchive = () => {
         <Alert.Root status="error" mb={6}>
           <Alert.Indicator />
           <Alert.Content>
-            <Alert.Title>Could not verify access</Alert.Title>
+            <Alert.Title>アクセスを確認できませんでした</Alert.Title>
             <Alert.Description>{statusError}</Alert.Description>
           </Alert.Content>
         </Alert.Root>
@@ -187,19 +187,19 @@ const LessonArchive = () => {
 
       {sessionToken && streamUrl && (
         <Box>
-          <Text mb={3} fontWeight="bold">Your lesson is ready.</Text>
+          <Text mb={3} fontWeight="bold">レッスンの準備ができました。</Text>
           <video
             controls
             src={streamUrl}
             style={{ width: '100%', borderRadius: '12px' }}
           >
-            Your browser does not support the video tag.
+            お使いのブラウザはvideoタグに対応していません。
           </video>
         </Box>
       )}
 
       <Link asChild display="inline-block" mt={8}>
-        <RouterLink to="/online-community">Back to Online Community</RouterLink>
+        <RouterLink to="/online-community">オンラインコミュニティに戻る</RouterLink>
       </Link>
     </Box>
   );
