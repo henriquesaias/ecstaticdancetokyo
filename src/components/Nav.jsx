@@ -53,17 +53,6 @@ const Nav = () => {
             </Button>
           </LLink>
 
-          <LLink to="/lessons?video=sample-lesson">
-            <Button
-              variant='subtle'
-              borderRadius={0}
-              backgroundColor='#b03002'
-              _hover={{ backgroundColor: '#85340b' }}
-            >
-              アーカイブ
-            </Button>
-          </LLink>
-
           <LLink>
             <Button
               variant='subtle'
