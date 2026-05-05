@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Link as RouterLink, useSearchParams } from 'react-router-dom';
+import { Link as RouterLink, useParams, useSearchParams } from 'react-router-dom';
 import {
   Alert,
   Box,
@@ -22,9 +22,33 @@ const isValidEmail = (email) => {
   return /^\S+@\S+\.\S+$/.test(email);
 };
 
+const normalizeVideoSlug = (value) => {
+  const normalized = String(value || '').trim().replace(/^\/+/, '');
+
+  if (!normalized) {
+    return '';
+  }
+
+  return normalized.replace(/\.mp4$/i, '');
+};
+
 const LessonArchive = () => {
+  const params = useParams();
   const [searchParams] = useSearchParams();
-  const video = (searchParams.get('video') || '').trim();
+  const videoFromPath = (() => {
+    const raw = (params['*'] || '').trim().replace(/^\/+/, '');
+
+    if (!raw) {
+      return '';
+    }
+
+    try {
+      return decodeURIComponent(raw).trim();
+    } catch (_) {
+      return raw;
+    }
+  })();
+  const video = normalizeVideoSlug(videoFromPath || searchParams.get('video') || '');
   const emailToken = (searchParams.get('token') || '').trim();
 
   const [email, setEmail] = useState('');
@@ -85,7 +109,7 @@ const LessonArchive = () => {
     const normalizedEmail = email.trim().toLowerCase();
 
     if (!video) {
-      setStatusError('URLに動画IDがありません。?video=your-video-slug を追加してください');
+      setStatusError('URLに動画IDがありません。/#/lessons/ElementsMay2026/EarthMay4.mp4 の形式で開いてください。');
       setStatusMessage('');
       return;
     }
@@ -128,7 +152,7 @@ const LessonArchive = () => {
           <Alert.Content>
             <Alert.Title>動画パラメータが必要です</Alert.Title>
             <Alert.Description>
-              /#/lessons?video=breathwork-2026-05-01 のようなURLでこのページを開いてください
+              /#/lessons/ElementsMay2026/EarthMay4.mp4 のようなURLでこのページを開いてください
             </Alert.Description>
           </Alert.Content>
         </Alert.Root>
@@ -190,6 +214,10 @@ const LessonArchive = () => {
           <Text mb={3} fontWeight="bold">クラスの準備ができました。</Text>
           <video
             controls
+            controlsList="nodownload noremoteplayback"
+            disablePictureInPicture
+            disableRemotePlayback
+            onContextMenu={(event) => event.preventDefault()}
             src={streamUrl}
             style={{ width: '100%', borderRadius: '12px' }}
           >

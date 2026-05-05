@@ -37,7 +37,7 @@ const VIDEO_REGEX = /^[A-Za-z0-9._\-/ %()+]+$/;
 
 const isValidEmail = (email) => EMAIL_REGEX.test(email || '');
 
-const normalizeVideoKey = (video, prefix) => {
+const normalizeVideoSlug = (video) => {
   const value = (video || '').trim();
 
   if (!value || !VIDEO_REGEX.test(value) || value.includes('..')) {
@@ -45,6 +45,22 @@ const normalizeVideoKey = (video, prefix) => {
   }
 
   const sanitized = value.replace(/^\/+/, '');
+
+  if (!sanitized) {
+    return null;
+  }
+
+  return sanitized.replace(/\.mp4$/i, '');
+};
+
+const normalizeVideoKey = (video, prefix) => {
+  const slug = normalizeVideoSlug(video);
+
+  if (!slug) {
+    return null;
+  }
+
+  const sanitized = `${slug}.mp4`;
   const cleanPrefix = (prefix || '').replace(/^\/+|\/+$/g, '');
 
   if (!cleanPrefix) {
@@ -64,6 +80,13 @@ const encodeObjectPath = (value) => {
   return String(value)
     .split('/')
     .map((segment) => encodeRfc3986(segment))
+    .join('/');
+};
+
+const encodeUrlPath = (value) => {
+  return String(value)
+    .split('/')
+    .map((segment) => encodeURIComponent(segment))
     .join('/');
 };
 
@@ -188,10 +211,20 @@ const canProductAccessVideo = (product, video, videoKey) => {
   }
 
   const normalizedVideo = normalizePathToken(video);
+  const normalizedVideoWithExtension = normalizePathToken(`${video}.mp4`);
   const normalizedVideoKey = normalizePathToken(videoKey);
+  const normalizedVideoKeyWithoutExtension = normalizedVideoKey.replace(/\.mp4$/i, '');
 
   const exactVideos = metadataList(product, 'access_videos');
-  if (exactVideos.some((rule) => rule === normalizedVideo || rule === normalizedVideoKey)) {
+  if (
+    exactVideos.some(
+      (rule) =>
+        rule === normalizedVideo ||
+        rule === normalizedVideoWithExtension ||
+        rule === normalizedVideoKey ||
+        rule === normalizedVideoKeyWithoutExtension
+    )
+  ) {
     return true;
   }
 
@@ -234,7 +267,7 @@ const stripeRequest = async (env, path, searchParams = {}) => {
 
   if (!res.ok) {
     const body = await res.text();
-    throw new Error(`Stripe request failed (${res.status}): ${body}`);
+    throw new Error(`Stripeへのリクエストに失敗しました (${res.status}): ${body}`);
   }
 
   return res.json();
@@ -314,18 +347,18 @@ const sendEmail = async (env, email, verifyUrl) => {
     body: JSON.stringify({
       from: env.EMAIL_FROM,
       to: [email],
-      subject: env.EMAIL_SUBJECT || 'Confirm your lesson access',
+      subject: env.EMAIL_SUBJECT || 'オンラインレッスン視聴確認',
       html: `
-        <p>Please confirm your email to unlock your requested lesson.</p>
-        <p><a href="${verifyUrl}">Open lesson securely</a></p>
-        <p>This link expires in 15 minutes.</p>
+        <p>ご希望のレッスンを視聴するために、メール認証を完了してください。</p>
+        <p><a href="${verifyUrl}">安全にレッスンを開く</a></p>
+        <p>このリンクの有効期限は15分です。</p>
       `,
     }),
   });
 
   if (!res.ok) {
     const body = await res.text();
-    throw new Error(`Email provider request failed (${res.status}): ${body}`);
+    throw new Error(`メール送信プロバイダーへのリクエストに失敗しました (${res.status}): ${body}`);
   }
 };
 
@@ -408,17 +441,17 @@ const checkObjectAccess = async (env, objectKey) => {
 const handleRequestEmailLink = async (request, env) => {
   const body = await parseJson(request);
   const email = (body?.email || '').trim().toLowerCase();
-  const video = (body?.video || '').trim();
+  const video = normalizeVideoSlug(body?.video || '');
   const videoKey = normalizeVideoKey(video, env.DO_SPACES_PREFIX);
 
   if (!isValidEmail(email) || !videoKey) {
-    return json({ error: 'Invalid email or video identifier.' }, { status: 400 });
+    return json({ error: 'メールアドレスまたは動画識別子が無効です。' }, { status: 400 });
   }
 
   const hasAccess = await hasStripeAccess(env, email, video, videoKey);
 
   if (!hasAccess) {
-    return json({ error: 'Email is not linked to an active subscription with access to this lesson.' }, { status: 403 });
+    return json({ error: 'このメールアドレスは、このレッスンを視聴可能な有効サブスクリプションに紐づいていません。' }, { status: 403 });
   }
 
   const objectAccess = await checkObjectAccess(env, videoKey);
@@ -426,7 +459,7 @@ const handleRequestEmailLink = async (request, env) => {
     if (objectAccess.status === 401 || objectAccess.status === 403 || objectAccess.apiStatus === 401 || objectAccess.apiStatus === 403) {
       return json(
         {
-          error: 'Lesson object is not readable with current Spaces permissions or key configuration.',
+          error: '現在のSpaces権限またはキー設定では、レッスン動画オブジェクトを読み取れません。',
           details: {
             source: objectAccess.source,
             status: objectAccess.status,
@@ -438,7 +471,7 @@ const handleRequestEmailLink = async (request, env) => {
       );
     }
 
-    return json({ error: 'Requested lesson does not exist.' }, { status: 404 });
+    return json({ error: '指定されたレッスンが存在しません。' }, { status: 404 });
   }
 
   const rawToken = crypto.randomUUID().replace(/-/g, '');
@@ -453,19 +486,19 @@ const handleRequestEmailLink = async (request, env) => {
     .bind(tokenHash, email, video, createdAt, expiresAt)
     .run();
 
-  const verifyUrl = `${env.PUBLIC_APP_ARCHIVE_URL}?video=${encodeURIComponent(video)}&token=${encodeURIComponent(rawToken)}`;
+  const verifyUrl = `${env.PUBLIC_APP_ARCHIVE_URL}/${encodeUrlPath(video)}?token=${encodeURIComponent(rawToken)}`;
   await sendEmail(env, email, verifyUrl);
 
-  return json({ ok: true, message: 'Verification email sent.' }, { status: 202 });
+  return json({ ok: true, message: '認証メールを送信しました。' }, { status: 202 });
 };
 
 const handleVerifyEmail = async (request, env) => {
   const body = await parseJson(request);
   const rawToken = (body?.token || '').trim();
-  const video = (body?.video || '').trim();
+  const video = normalizeVideoSlug(body?.video || '');
 
   if (!rawToken || !video) {
-    return json({ error: 'Missing token or video.' }, { status: 400 });
+    return json({ error: 'トークンまたは動画情報が不足しています。' }, { status: 400 });
   }
 
   const tokenHash = await sha256Hex(rawToken);
@@ -479,8 +512,8 @@ const handleVerifyEmail = async (request, env) => {
     .bind(tokenHash)
     .first();
 
-  if (!row || row.video_slug !== video || row.used_at || row.expires_at < current) {
-    return json({ error: 'Invalid or expired verification token.' }, { status: 401 });
+  if (!row || normalizeVideoSlug(row.video_slug) !== video || row.used_at || row.expires_at < current) {
+    return json({ error: '認証トークンが無効か、有効期限が切れています。' }, { status: 401 });
   }
 
   await env.DB.prepare('UPDATE verification_tokens SET used_at = ? WHERE token_hash = ?')
@@ -513,19 +546,19 @@ const handleVerifyEmail = async (request, env) => {
 
 const handleStream = async (request, env) => {
   const url = new URL(request.url);
-  const video = (url.searchParams.get('video') || '').trim();
+  const video = normalizeVideoSlug(url.searchParams.get('video') || '');
   const sessionToken = (url.searchParams.get('session') || '').trim();
   const videoKey = normalizeVideoKey(video, env.DO_SPACES_PREFIX);
 
   if (!videoKey || !sessionToken) {
-    return json({ error: 'Missing session or video.' }, { status: 400 });
+    return json({ error: 'セッションまたは動画情報が不足しています。' }, { status: 400 });
   }
 
   const freshSession = await verifySession(sessionToken, env.SESSION_SIGNING_SECRET);
   const session = freshSession || await verifySession(sessionToken, env.SESSION_SIGNING_SECRET, { ignoreExpiration: true });
 
-  if (!session || session.video !== video) {
-    return json({ error: 'Invalid session.' }, { status: 401 });
+  if (!session || normalizeVideoSlug(session.video) !== video) {
+    return json({ error: 'セッションが無効です。' }, { status: 401 });
   }
 
   const sessionRow = await env.DB.prepare(
@@ -536,8 +569,8 @@ const handleStream = async (request, env) => {
     .bind(session.sid)
     .first();
 
-  if (!sessionRow || sessionRow.video_slug !== video) {
-    return json({ error: 'Invalid session.' }, { status: 401 });
+  if (!sessionRow || normalizeVideoSlug(sessionRow.video_slug) !== video) {
+    return json({ error: 'セッションが無効です。' }, { status: 401 });
   }
 
   const current = nowUnix();
@@ -554,7 +587,7 @@ const handleStream = async (request, env) => {
     const continuationSeconds = Number(env.PLAYBACK_CONTINUATION_SECONDS || 21600);
 
     if (!startedAt || current > startedAt + continuationSeconds) {
-      return json({ error: 'Session expired.' }, { status: 401 });
+      return json({ error: 'セッションの有効期限が切れました。' }, { status: 401 });
     }
   }
 
@@ -580,7 +613,7 @@ const handleStream = async (request, env) => {
 
   if (!upstreamResponse.ok && upstreamResponse.status !== 206) {
     const body = await upstreamResponse.text();
-    return json({ error: `Video fetch failed (${upstreamResponse.status}): ${body}` }, { status: 502 });
+    return json({ error: `動画の取得に失敗しました (${upstreamResponse.status}): ${body}` }, { status: 502 });
   }
 
   const responseHeaders = new Headers();
@@ -596,6 +629,10 @@ const handleStream = async (request, env) => {
   if (!responseHeaders.has('Content-Type')) {
     responseHeaders.set('Content-Type', 'video/mp4');
   }
+
+  responseHeaders.set('Content-Disposition', 'inline');
+  responseHeaders.set('Cache-Control', 'private, no-store');
+  responseHeaders.set('X-Content-Type-Options', 'nosniff');
 
   return new Response(upstreamResponse.body, {
     status: upstreamResponse.status,
@@ -621,12 +658,12 @@ export default {
       } else if (request.method === 'GET' && url.pathname === '/v1/access/stream') {
         response = await handleStream(request, env);
       } else {
-        response = json({ error: 'Not found' }, { status: 404 });
+        response = json({ error: '見つかりません。' }, { status: 404 });
       }
 
       return withCors(request, response);
     } catch (err) {
-      const message = err instanceof Error ? err.message : 'Unexpected worker error.';
+      const message = err instanceof Error ? err.message : '予期しないWorkerエラーが発生しました。';
       return withCors(request, json({ error: message }, { status: 500 }));
     }
   },

@@ -2,11 +2,11 @@ const API_BASE_URL = process.env.REACT_APP_LESSON_ACCESS_API_BASE_URL;
 
 if (!API_BASE_URL) {
   // eslint-disable-next-line no-console
-  console.warn('REACT_APP_LESSON_ACCESS_API_BASE_URL is not set. Lesson archive requests will fail.');
+  console.warn('REACT_APP_LESSON_ACCESS_API_BASE_URL が未設定です。レッスンアーカイブへのリクエストは失敗します。');
 }
 
 const normalizeError = async (res) => {
-  let message = 'Request failed.';
+  let message = 'リクエストに失敗しました。';
 
   try {
     const data = await res.json();
