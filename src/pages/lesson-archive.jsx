@@ -130,7 +130,7 @@ const LessonArchive = () => {
         video,
       });
 
-      setStatusMessage('受信ボックスを確認し、リンクをクリックしてこのレッスンを解除してください。見当たらない場合は、迷惑メールやプロモーションフォルダも確認してください。');
+      setStatusMessage('受信トレイを確認し、リンクをクリックしてこのレッスンを解除してください。見当たらない場合は、迷惑メールやプロモーションフォルダも確認してください。');
     } catch (err) {
       setStatusError(err.message || '認証メールを送信できませんでした。');
       setStatusMessage('');
@@ -143,7 +143,7 @@ const LessonArchive = () => {
     <Box>
       <Heading as="h2" mb={3}>オンラインレッスンアーカイブ</Heading>
       <Text mb={8}>
-        購入時に登録したメールアドレスを入力すると、クラスのログインリンクが送信されます。
+        サブスクリプションに登録したメールアドレスを入力すると、このレッスン用の安全なログインリンクが送信されます。
       </Text>
 
       {!video && (
@@ -161,7 +161,7 @@ const LessonArchive = () => {
       {video && !sessionToken && (
         <Box as="form" onSubmit={onRequestLink} mb={8}>
           <VStack align="stretch" gap={4}>
-            <Text fontWeight="bold">リクエストされたクラス: {video}</Text>
+            <Text fontWeight="bold">リクエストされたレッスン: {video}</Text>
 
             <Field.Root required>
               <Field.Label>メールアドレス</Field.Label>
@@ -211,7 +211,7 @@ const LessonArchive = () => {
 
       {sessionToken && streamUrl && (
         <Box>
-          <Text mb={3} fontWeight="bold">クラスの準備ができました。</Text>
+          <Text mb={3} fontWeight="bold">レッスンの準備ができました。</Text>
           <video
             controls
             controlsList="nodownload noremoteplayback"
@@ -221,7 +221,7 @@ const LessonArchive = () => {
             src={streamUrl}
             style={{ width: '100%', borderRadius: '12px' }}
           >
-            お使いのブラウザはビデオタグに対応していません。
+            お使いのブラウザはvideoタグに対応していません。
           </video>
         </Box>
       )}

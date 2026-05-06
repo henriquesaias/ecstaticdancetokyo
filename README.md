@@ -6,7 +6,9 @@ This repository now includes a secure archive flow for online lessons with these
 
 - Video is requested by URL param on the frontend (`/#/lessons?video=...`).
 - User must enter an email.
-- Worker verifies that email belongs to a Stripe customer with an active subscription whose product metadata grants access to the requested video.
+- Worker verifies that email belongs to a Stripe customer with valid entitlement.
+- Subscription products are allowed based on active/trialing subscription status.
+- One-off Checkout purchases are allowed for a limited window starting from first granted access (default 90 days).
 - Worker sends a one-time verification link by email.
 - Only after clicking that link does the app receive a short-lived session token.
 - Video is streamed through the Worker (not directly exposed), and every stream request validates the session.
@@ -36,7 +38,7 @@ Quick start:
 1. `cd workers/lesson-access`
 2. `npm install`
 3. Create D1 DB and bind it in `wrangler.toml`.
-4. Apply schema: `wrangler d1 execute lesson-access --file=./schema.sql`
+4. Apply schema: `wrangler d1 execute emi-lesson-access --file=./schema.sql`
 5. Configure vars in `wrangler.toml` and secrets with `wrangler secret put`.
 6. Deploy: `npm run deploy`
 
@@ -52,6 +54,7 @@ Required Worker secrets:
 Important vars (non-secret):
 
 - `PUBLIC_APP_ARCHIVE_URL` (for verification link target)
+- `ONE_OFF_ACCESS_WINDOW_DAYS` (one-off purchase access window starting at first granted access)
 - `DO_SPACES_ENDPOINT` (for example `https://nyc3.digitaloceanspaces.com`)
 - `DO_SPACES_REGION` (for example `nyc3`)
 - `DO_SPACES_BUCKET`
@@ -67,6 +70,7 @@ Notes:
 
 - `DO_SPACES_KEY` should be your DigitalOcean Spaces access key ID (not the secret).
 - Video values should match the same `video` query value used in `/#/lessons?video=...`.
+- After updating Worker schema, run `wrangler d1 execute emi-lesson-access --file=./schema.sql --remote` to create `one_off_access_grants` in production.
 
 ## Getting Started with Create React App
 

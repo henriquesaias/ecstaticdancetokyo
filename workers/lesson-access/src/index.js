@@ -283,7 +283,10 @@ const hasStripeAccess = async (env, email, video, videoKey) => {
   const customers = customerSearch.data || [];
 
   if (!customers.length) {
-    return false;
+    return {
+      hasAccess: false,
+      oneOffExpired: false,
+    };
   }
 
   const allowedStatuses = (env.ALLOWED_SUBSCRIPTION_STATUSES || 'active,trialing')
@@ -311,9 +314,9 @@ const hasStripeAccess = async (env, email, video, videoKey) => {
     return product;
   };
 
-  for (const customer of customers) {
+  const hasSubscriptionAccess = async (customerId) => {
     const subs = await stripeRequest(env, '/v1/subscriptions', {
-      customer: customer.id,
+      customer: customerId,
       status: 'all',
       limit: '100',
     });
@@ -332,9 +335,133 @@ const hasStripeAccess = async (env, email, video, videoKey) => {
         }
       }
     }
+
+    return false;
+  };
+
+  const hasOneOffCheckoutAccess = async (customerId) => {
+    const oneOffAccessWindowDays = Number(env.ONE_OFF_ACCESS_WINDOW_DAYS || 90);
+    const oneOffAccessWindowSeconds = oneOffAccessWindowDays * 24 * 60 * 60;
+    const current = nowUnix();
+
+    const existingGrant = await env.DB.prepare(
+      `SELECT granted_at, source_checkout_created_at
+       FROM one_off_access_grants
+       WHERE email = ? AND video_slug = ?`
+    )
+      .bind(email, video)
+      .first();
+
+    const sessions = await stripeRequest(env, '/v1/checkout/sessions', {
+      customer: customerId,
+      limit: '100',
+    });
+
+    let latestMatchingPurchaseCreated = 0;
+    let latestMatchingSessionId = null;
+
+    for (const session of sessions.data || []) {
+      const isOneOff = session.mode === 'payment';
+      const isPaid = session.payment_status === 'paid';
+
+      if (!isOneOff || !isPaid) {
+        continue;
+      }
+
+      const lineItems = await stripeRequest(
+        env,
+        `/v1/checkout/sessions/${encodeURIComponent(session.id)}/line_items`,
+        { limit: '100' }
+      );
+
+      for (const item of lineItems.data || []) {
+        const product = await getProduct(item.price?.product);
+        if (canProductAccessVideo(product, video, videoKey)) {
+          const createdAt = Number(session.created || 0);
+
+          if (createdAt >= latestMatchingPurchaseCreated) {
+            latestMatchingPurchaseCreated = createdAt;
+            latestMatchingSessionId = session.id;
+          }
+
+          break;
+        }
+      }
+    }
+
+    if (!latestMatchingPurchaseCreated) {
+      const grantedAt = Number(existingGrant?.granted_at || 0);
+      const grantExpired = grantedAt > 0 && current > grantedAt + oneOffAccessWindowSeconds;
+
+      return {
+        hasAccess: false,
+        oneOffExpired: grantExpired,
+      };
+    }
+
+    if (existingGrant?.granted_at) {
+      const grantedAt = Number(existingGrant.granted_at || 0);
+
+      if (current <= grantedAt + oneOffAccessWindowSeconds) {
+        return {
+          hasAccess: true,
+          oneOffExpired: false,
+        };
+      }
+
+      const grantSourceCreated = Number(existingGrant.source_checkout_created_at || 0);
+      const hasNewerPurchase = latestMatchingPurchaseCreated > grantSourceCreated;
+
+      if (!hasNewerPurchase) {
+        return {
+          hasAccess: false,
+          oneOffExpired: true,
+        };
+      }
+    }
+
+    await env.DB.prepare(
+      `INSERT INTO one_off_access_grants (email, video_slug, granted_at, source_checkout_session_id, source_checkout_created_at)
+       VALUES (?, ?, ?, ?, ?)
+       ON CONFLICT(email, video_slug)
+       DO UPDATE SET
+         granted_at = excluded.granted_at,
+         source_checkout_session_id = excluded.source_checkout_session_id,
+         source_checkout_created_at = excluded.source_checkout_created_at`
+    )
+      .bind(email, video, current, latestMatchingSessionId, latestMatchingPurchaseCreated)
+      .run();
+
+    return {
+      hasAccess: true,
+      oneOffExpired: false,
+    };
+  };
+
+  let oneOffExpired = false;
+
+  for (const customer of customers) {
+    if (await hasSubscriptionAccess(customer.id)) {
+      return {
+        hasAccess: true,
+        oneOffExpired: false,
+      };
+    }
+
+    const oneOffResult = await hasOneOffCheckoutAccess(customer.id);
+    if (oneOffResult.hasAccess) {
+      return oneOffResult;
+    }
+
+    if (oneOffResult.oneOffExpired) {
+      oneOffExpired = true;
+    }
   }
 
-  return false;
+  return {
+    hasAccess: false,
+    oneOffExpired,
+  };
 };
 
 const sendEmail = async (env, email, verifyUrl) => {
@@ -448,9 +575,18 @@ const handleRequestEmailLink = async (request, env) => {
     return json({ error: 'メールアドレスまたは動画識別子が無効です。' }, { status: 400 });
   }
 
-  const hasAccess = await hasStripeAccess(env, email, video, videoKey);
+  const accessResult = await hasStripeAccess(env, email, video, videoKey);
 
-  if (!hasAccess) {
+  if (!accessResult.hasAccess) {
+    if (accessResult.oneOffExpired) {
+      return json(
+        {
+          error: 'この単発購入の視聴期間（90日）が終了しました。再度ご購入いただくと視聴を再開できます。',
+        },
+        { status: 403 }
+      );
+    }
+
     return json({ error: 'このメールアドレスは、このレッスンを視聴可能な有効サブスクリプションに紐づいていません。' }, { status: 403 });
   }
 
