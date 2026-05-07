@@ -573,8 +573,27 @@ const checkObjectAccess = async (env, objectKey) => {
     return { exists: true, source: 'spaces-api', status: res.status };
   }
 
+  // Some storage/CDN setups can reject HEAD even when byte-range GET is allowed.
+  const probeGet = await fetchFromSpaces({
+    env,
+    objectKey,
+    method: 'GET',
+    range: 'bytes=0-0',
+  });
+
+  if (probeGet.ok || probeGet.status === 206) {
+    return { exists: true, source: 'spaces-api-get-probe', status: probeGet.status, headStatus: res.status };
+  }
+
   // Fallback to CDN URL for buckets configured for public read.
-  if (res.status === 401 || res.status === 403 || res.status === 400) {
+  if (
+    res.status === 401 ||
+    res.status === 403 ||
+    res.status === 400 ||
+    probeGet.status === 401 ||
+    probeGet.status === 403 ||
+    probeGet.status === 400
+  ) {
     const cdnRes = await fetchFromSpacesCdn({
       env,
       objectKey,
@@ -585,15 +604,34 @@ const checkObjectAccess = async (env, objectKey) => {
       return { exists: true, source: 'spaces-cdn', status: cdnRes.status };
     }
 
+    const cdnProbeGet = await fetchFromSpacesCdn({
+      env,
+      objectKey,
+      method: 'GET',
+      range: 'bytes=0-0',
+    });
+
+    if (cdnProbeGet.ok || cdnProbeGet.status === 206) {
+      return {
+        exists: true,
+        source: 'spaces-cdn-get-probe',
+        status: cdnProbeGet.status,
+        apiStatus: res.status,
+        apiGetStatus: probeGet.status,
+      };
+    }
+
     return {
       exists: false,
       source: 'spaces-api+cdn',
-      status: cdnRes.status,
+      status: cdnProbeGet.status || cdnRes.status,
       apiStatus: res.status,
+      apiGetStatus: probeGet.status,
+      cdnHeadStatus: cdnRes.status,
     };
   }
 
-  return { exists: false, source: 'spaces-api', status: res.status };
+  return { exists: false, source: 'spaces-api', status: probeGet.status || res.status, headStatus: res.status };
 };
 
 const handleRequestEmailLink = async (request, env) => {
@@ -624,13 +662,25 @@ const handleRequestEmailLink = async (request, env) => {
   const objectAccess = await checkObjectAccess(env, videoKey);
   if (!objectAccess.exists) {
     if (objectAccess.status === 401 || objectAccess.status === 403 || objectAccess.apiStatus === 401 || objectAccess.apiStatus === 403) {
+      const debug = [
+        `source=${objectAccess.source}`,
+        `status=${objectAccess.status}`,
+        `apiStatus=${objectAccess.apiStatus || '-'}`,
+        `apiGetStatus=${objectAccess.apiGetStatus || '-'}`,
+        `cdnHeadStatus=${objectAccess.cdnHeadStatus || '-'}`,
+        `headStatus=${objectAccess.headStatus || '-'}`,
+      ].join(', ');
+
       return json(
         {
-          error: '現在のSpaces権限またはキー設定では、レッスン動画オブジェクトを読み取れません。',
+          error: `現在のSpaces権限またはキー設定では、レッスン動画オブジェクトを読み取れません。(${debug})`,
           details: {
             source: objectAccess.source,
             status: objectAccess.status,
             apiStatus: objectAccess.apiStatus,
+            apiGetStatus: objectAccess.apiGetStatus,
+            cdnHeadStatus: objectAccess.cdnHeadStatus,
+            headStatus: objectAccess.headStatus,
             objectKey: videoKey,
           },
         },
