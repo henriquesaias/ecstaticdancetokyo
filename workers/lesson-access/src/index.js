@@ -282,13 +282,6 @@ const hasStripeAccess = async (env, email, video, videoKey) => {
 
   const customers = customerSearch.data || [];
 
-  if (!customers.length) {
-    return {
-      hasAccess: false,
-      oneOffExpired: false,
-    };
-  }
-
   const allowedStatuses = (env.ALLOWED_SUBSCRIPTION_STATUSES || 'active,trialing')
     .split(',')
     .map((value) => value.trim())
@@ -312,6 +305,47 @@ const hasStripeAccess = async (env, email, video, videoKey) => {
     const product = await stripeRequest(env, `/v1/products/${encodeURIComponent(productRef)}`);
     productCache.set(productRef, product);
     return product;
+  };
+
+  const normalizeComparableEmail = (value) => String(value || '').trim().toLowerCase();
+
+  const findLatestMatchingOneOffPurchase = async (sessions) => {
+    let latestMatchingPurchaseCreated = 0;
+    let latestMatchingSessionId = null;
+
+    for (const session of sessions || []) {
+      const isOneOff = session.mode === 'payment';
+      const isPaid = session.payment_status === 'paid';
+
+      if (!isOneOff || !isPaid) {
+        continue;
+      }
+
+      const lineItems = await stripeRequest(
+        env,
+        `/v1/checkout/sessions/${encodeURIComponent(session.id)}/line_items`,
+        { limit: '100' }
+      );
+
+      for (const item of lineItems.data || []) {
+        const product = await getProduct(item.price?.product);
+        if (canProductAccessVideo(product, video, videoKey)) {
+          const createdAt = Number(session.created || 0);
+
+          if (createdAt >= latestMatchingPurchaseCreated) {
+            latestMatchingPurchaseCreated = createdAt;
+            latestMatchingSessionId = session.id;
+          }
+
+          break;
+        }
+      }
+    }
+
+    return {
+      latestMatchingPurchaseCreated,
+      latestMatchingSessionId,
+    };
   };
 
   const hasSubscriptionAccess = async (customerId) => {
@@ -357,40 +391,37 @@ const hasStripeAccess = async (env, email, video, videoKey) => {
       limit: '100',
     });
 
-    let latestMatchingPurchaseCreated = 0;
-    let latestMatchingSessionId = null;
+    let { latestMatchingPurchaseCreated, latestMatchingSessionId } = await findLatestMatchingOneOffPurchase(
+      sessions.data || []
+    );
 
-    for (const session of sessions.data || []) {
-      const isOneOff = session.mode === 'payment';
-      const isPaid = session.payment_status === 'paid';
+    if (!latestMatchingPurchaseCreated) {
+      // Fallback for valid customers where checkout sessions weren't linked to customer ID.
+      const allRecentSessions = await stripeRequest(env, '/v1/checkout/sessions', {
+        limit: '100',
+      });
 
-      if (!isOneOff || !isPaid) {
-        continue;
-      }
+      const filteredByEmail = (allRecentSessions.data || []).filter((session) => {
+        const sessionEmail = normalizeComparableEmail(
+          session.customer_details?.email || session.customer_email
+        );
+        return sessionEmail && sessionEmail === normalizeComparableEmail(email);
+      });
 
-      const lineItems = await stripeRequest(
-        env,
-        `/v1/checkout/sessions/${encodeURIComponent(session.id)}/line_items`,
-        { limit: '100' }
-      );
-
-      for (const item of lineItems.data || []) {
-        const product = await getProduct(item.price?.product);
-        if (canProductAccessVideo(product, video, videoKey)) {
-          const createdAt = Number(session.created || 0);
-
-          if (createdAt >= latestMatchingPurchaseCreated) {
-            latestMatchingPurchaseCreated = createdAt;
-            latestMatchingSessionId = session.id;
-          }
-
-          break;
-        }
-      }
+      const fallbackMatch = await findLatestMatchingOneOffPurchase(filteredByEmail);
+      latestMatchingPurchaseCreated = fallbackMatch.latestMatchingPurchaseCreated;
+      latestMatchingSessionId = fallbackMatch.latestMatchingSessionId;
     }
 
     if (!latestMatchingPurchaseCreated) {
       const grantedAt = Number(existingGrant?.granted_at || 0);
+      if (grantedAt > 0 && current <= grantedAt + oneOffAccessWindowSeconds) {
+        return {
+          hasAccess: true,
+          oneOffExpired: false,
+        };
+      }
+
       const grantExpired = grantedAt > 0 && current > grantedAt + oneOffAccessWindowSeconds;
 
       return {
