@@ -288,6 +288,7 @@ const hasStripeAccess = async (env, email, video, videoKey) => {
     .filter(Boolean);
 
   const productCache = new Map();
+  const priceCache = new Map();
 
   const getProduct = async (productRef) => {
     if (!productRef) {
@@ -307,7 +308,77 @@ const hasStripeAccess = async (env, email, video, videoKey) => {
     return product;
   };
 
+  const getPrice = async (priceRef) => {
+    if (!priceRef) {
+      return null;
+    }
+
+    if (typeof priceRef !== 'string') {
+      if (priceRef.product) {
+        return priceRef;
+      }
+
+      if (!priceRef.id || typeof priceRef.id !== 'string') {
+        return null;
+      }
+
+      if (priceCache.has(priceRef.id)) {
+        return priceCache.get(priceRef.id);
+      }
+
+      const fetchedPrice = await stripeRequest(env, `/v1/prices/${encodeURIComponent(priceRef.id)}`);
+      priceCache.set(priceRef.id, fetchedPrice);
+      return fetchedPrice;
+    }
+
+    if (priceCache.has(priceRef)) {
+      return priceCache.get(priceRef);
+    }
+
+    const price = await stripeRequest(env, `/v1/prices/${encodeURIComponent(priceRef)}`);
+    priceCache.set(priceRef, price);
+    return price;
+  };
+
+  const getProductFromPriceRef = async (priceRef) => {
+    const price = await getPrice(priceRef);
+    return getProduct(price?.product);
+  };
+
   const normalizeComparableEmail = (value) => String(value || '').trim().toLowerCase();
+
+  const listCheckoutSessions = async ({ customerId } = {}) => {
+    const pageLimit = Number(env.CHECKOUT_SESSION_SCAN_PAGES || 20);
+    const sessions = [];
+    let startingAfter;
+
+    for (let page = 0; page < pageLimit; page += 1) {
+      const params = {
+        limit: '100',
+      };
+
+      if (customerId) {
+        params.customer = customerId;
+      }
+
+      if (startingAfter) {
+        params.starting_after = startingAfter;
+      }
+
+      const response = await stripeRequest(env, '/v1/checkout/sessions', params);
+      const pageData = response.data || [];
+
+      sessions.push(...pageData);
+
+      if (!response.has_more || !pageData.length) {
+        break;
+      }
+
+      startingAfter = pageData[pageData.length - 1].id;
+    }
+
+    return sessions;
+  };
 
   const findLatestMatchingOneOffPurchase = async (sessions) => {
     let latestMatchingPurchaseCreated = 0;
@@ -328,7 +399,7 @@ const hasStripeAccess = async (env, email, video, videoKey) => {
       );
 
       for (const item of lineItems.data || []) {
-        const product = await getProduct(item.price?.product);
+        const product = await getProductFromPriceRef(item.price);
         if (canProductAccessVideo(product, video, videoKey)) {
           const createdAt = Number(session.created || 0);
 
@@ -363,7 +434,7 @@ const hasStripeAccess = async (env, email, video, videoKey) => {
       }
 
       for (const item of sub.items?.data || []) {
-        const product = await getProduct(item.price?.product);
+        const product = await getProductFromPriceRef(item.price);
         if (canProductAccessVideo(product, video, videoKey)) {
           return true;
         }
@@ -386,22 +457,17 @@ const hasStripeAccess = async (env, email, video, videoKey) => {
       .bind(email, video)
       .first();
 
-    const sessions = await stripeRequest(env, '/v1/checkout/sessions', {
-      customer: customerId,
-      limit: '100',
-    });
+    const customerSessions = await listCheckoutSessions({ customerId });
 
     let { latestMatchingPurchaseCreated, latestMatchingSessionId } = await findLatestMatchingOneOffPurchase(
-      sessions.data || []
+      customerSessions
     );
 
     if (!latestMatchingPurchaseCreated) {
       // Fallback for valid customers where checkout sessions weren't linked to customer ID.
-      const allRecentSessions = await stripeRequest(env, '/v1/checkout/sessions', {
-        limit: '100',
-      });
+      const allRecentSessions = await listCheckoutSessions();
 
-      const filteredByEmail = (allRecentSessions.data || []).filter((session) => {
+      const filteredByEmail = allRecentSessions.filter((session) => {
         const sessionEmail = normalizeComparableEmail(
           session.customer_details?.email || session.customer_email
         );
