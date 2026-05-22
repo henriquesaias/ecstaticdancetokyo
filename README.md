@@ -8,7 +8,7 @@ This repository now includes a secure archive flow for online lessons with these
 - User must enter an email.
 - Worker verifies that email belongs to a Stripe customer with valid entitlement.
 - Subscription products are allowed based on active/trialing subscription status.
-- One-off Checkout purchases are allowed for a limited window starting from first granted access (default 90 days).
+- One-off Checkout purchases are persisted from Stripe webhooks into D1 entitlements, then granted for a limited window starting from first granted access (default 90 days).
 - Worker sends a one-time verification link by email.
 - Only after clicking that link does the app receive a short-lived session token.
 - Video is streamed through the Worker (not directly exposed), and every stream request validates the session.
@@ -41,10 +41,14 @@ Quick start:
 4. Apply schema: `wrangler d1 execute emi-lesson-access --file=./schema.sql`
 5. Configure vars in `wrangler.toml` and secrets with `wrangler secret put`.
 6. Deploy: `npm run deploy`
+7. Configure Stripe webhook endpoint: `https://<your-worker-domain>/v1/stripe/webhook`
+8. Subscribe webhook events: `checkout.session.completed` and `checkout.session.async_payment_succeeded`
 
 Required Worker secrets:
 
 - `STRIPE_SECRET_KEY`
+- `STRIPE_WEBHOOK_SECRET`
+- `BACKFILL_ADMIN_TOKEN` (for one-off historical backfill endpoint)
 - `RESEND_API_KEY`
 - `EMAIL_FROM`
 - `SESSION_SIGNING_SECRET`
@@ -70,7 +74,8 @@ Notes:
 
 - `DO_SPACES_KEY` should be your DigitalOcean Spaces access key ID (not the secret).
 - Video values should match the same `video` query value used in `/#/lessons?video=...`.
-- After updating Worker schema, run `wrangler d1 execute emi-lesson-access --file=./schema.sql --remote` to create `one_off_access_grants` in production.
+- After updating Worker schema, run `wrangler d1 execute emi-lesson-access --file=./schema.sql --remote` to create new entitlement tables in production.
+- One-time backfill endpoint: `POST /v1/admin/backfill-one-off-entitlements` with `Authorization: Bearer <BACKFILL_ADMIN_TOKEN>`.
 
 ## Getting Started with Create React App
 

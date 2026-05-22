@@ -33,3 +33,18 @@ CREATE TABLE IF NOT EXISTS one_off_access_grants (
 
 CREATE INDEX IF NOT EXISTS idx_one_off_access_grants_email ON one_off_access_grants (email);
 CREATE INDEX IF NOT EXISTS idx_one_off_access_grants_video_slug ON one_off_access_grants (video_slug);
+
+CREATE TABLE IF NOT EXISTS stripe_checkout_entitlements (
+  email TEXT NOT NULL,
+  session_id TEXT NOT NULL,
+  session_created_at INTEGER NOT NULL,
+  product_id TEXT NOT NULL,
+  access_all INTEGER NOT NULL DEFAULT 0,
+  access_videos TEXT,
+  access_prefixes TEXT,
+  created_at INTEGER NOT NULL,
+  PRIMARY KEY (email, session_id, product_id)
+);
+
+CREATE INDEX IF NOT EXISTS idx_stripe_checkout_entitlements_email ON stripe_checkout_entitlements (email);
+CREATE INDEX IF NOT EXISTS idx_stripe_checkout_entitlements_session_created_at ON stripe_checkout_entitlements (session_created_at);

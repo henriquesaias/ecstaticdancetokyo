@@ -137,6 +137,20 @@ const hmacSha256Hex = async (keyBytes, value) => {
   return bytesToHex(signature);
 };
 
+const timingSafeEqual = (left, right) => {
+  if (!left || !right || left.length !== right.length) {
+    return false;
+  }
+
+  let mismatch = 0;
+
+  for (let i = 0; i < left.length; i += 1) {
+    mismatch |= left.charCodeAt(i) ^ right.charCodeAt(i);
+  }
+
+  return mismatch === 0;
+};
+
 const signSession = async (payload, secret) => {
   const header = { alg: 'HS256', typ: 'JWT' };
   const encodedHeader = toBase64Url(JSON.stringify(header));
@@ -201,6 +215,14 @@ const metadataList = (product, key) => {
   return splitCsv(product?.metadata?.[key]).map((entry) => normalizePathToken(entry));
 };
 
+const stripMp4 = (value) => String(value || '').replace(/\.mp4$/i, '');
+
+const fileNameOf = (value) => {
+  const normalized = normalizePathToken(value);
+  const parts = normalized.split('/').filter(Boolean);
+  return parts.length ? parts[parts.length - 1] : '';
+};
+
 const canProductAccessVideo = (product, video, videoKey) => {
   if (!product || typeof product !== 'object') {
     return false;
@@ -214,15 +236,31 @@ const canProductAccessVideo = (product, video, videoKey) => {
   const normalizedVideoWithExtension = normalizePathToken(`${video}.mp4`);
   const normalizedVideoKey = normalizePathToken(videoKey);
   const normalizedVideoKeyWithoutExtension = normalizedVideoKey.replace(/\.mp4$/i, '');
+  const videoFileName = fileNameOf(normalizedVideoWithExtension);
+  const videoFileNameWithoutExtension = stripMp4(videoFileName);
 
   const exactVideos = metadataList(product, 'access_videos');
   if (
     exactVideos.some(
-      (rule) =>
-        rule === normalizedVideo ||
-        rule === normalizedVideoWithExtension ||
-        rule === normalizedVideoKey ||
-        rule === normalizedVideoKeyWithoutExtension
+      (rule) => {
+        if (
+          rule === normalizedVideo ||
+          rule === normalizedVideoWithExtension ||
+          rule === normalizedVideoKey ||
+          rule === normalizedVideoKeyWithoutExtension
+        ) {
+          return true;
+        }
+
+        // Allow compact metadata entries like FireMay18.mp4 or FireMay18.
+        const ruleFileName = fileNameOf(rule);
+        const ruleFileNameWithoutExtension = stripMp4(ruleFileName);
+
+        return (
+          ruleFileName === videoFileName ||
+          ruleFileNameWithoutExtension === videoFileNameWithoutExtension
+        );
+      }
     )
   ) {
     return true;
@@ -271,6 +309,141 @@ const stripeRequest = async (env, path, searchParams = {}) => {
   }
 
   return res.json();
+};
+
+const verifyStripeWebhookSignature = async (payload, signatureHeader, secret) => {
+  if (!payload || !signatureHeader || !secret) {
+    return false;
+  }
+
+  const parts = String(signatureHeader)
+    .split(',')
+    .map((entry) => entry.trim())
+    .filter(Boolean);
+
+  let timestamp = '';
+  const signatures = [];
+
+  for (const part of parts) {
+    const [key, value] = part.split('=', 2);
+    if (key === 't') {
+      timestamp = value || '';
+    }
+
+    if (key === 'v1' && value) {
+      signatures.push(value);
+    }
+  }
+
+  if (!timestamp || !signatures.length) {
+    return false;
+  }
+
+  const signedPayload = `${timestamp}.${payload}`;
+  const expected = await hmacSha256Hex(new TextEncoder().encode(secret), signedPayload);
+
+  return signatures.some((signature) => timingSafeEqual(signature, expected));
+};
+
+const hasOneOffAccessFromDb = async (env, email, video, videoKey) => {
+  const oneOffAccessWindowDays = Number(env.ONE_OFF_ACCESS_WINDOW_DAYS || 90);
+  const oneOffAccessWindowSeconds = oneOffAccessWindowDays * 24 * 60 * 60;
+  const current = nowUnix();
+
+  const existingGrant = await env.DB.prepare(
+    `SELECT granted_at, source_checkout_created_at
+     FROM one_off_access_grants
+     WHERE email = ? AND video_slug = ?`
+  )
+    .bind(email, video)
+    .first();
+
+  const entitlementRows = await env.DB.prepare(
+    `SELECT session_id, session_created_at, access_all, access_videos, access_prefixes
+     FROM stripe_checkout_entitlements
+     WHERE email = ?`
+  )
+    .bind(email)
+    .all();
+
+  let latestMatchingPurchaseCreated = 0;
+  let latestMatchingSessionId = null;
+
+  for (const row of entitlementRows.results || []) {
+    const productLike = {
+      metadata: {
+        access_all: row.access_all ? 'true' : 'false',
+        access_videos: row.access_videos || '',
+        access_prefixes: row.access_prefixes || '',
+      },
+    };
+
+    if (!canProductAccessVideo(productLike, video, videoKey)) {
+      continue;
+    }
+
+    const createdAt = Number(row.session_created_at || 0);
+
+    if (createdAt >= latestMatchingPurchaseCreated) {
+      latestMatchingPurchaseCreated = createdAt;
+      latestMatchingSessionId = row.session_id;
+    }
+  }
+
+  if (!latestMatchingPurchaseCreated) {
+    const grantedAt = Number(existingGrant?.granted_at || 0);
+    if (grantedAt > 0 && current <= grantedAt + oneOffAccessWindowSeconds) {
+      return {
+        hasAccess: true,
+        oneOffExpired: false,
+      };
+    }
+
+    const grantExpired = grantedAt > 0 && current > grantedAt + oneOffAccessWindowSeconds;
+
+    return {
+      hasAccess: false,
+      oneOffExpired: grantExpired,
+    };
+  }
+
+  if (existingGrant?.granted_at) {
+    const grantedAt = Number(existingGrant.granted_at || 0);
+
+    if (current <= grantedAt + oneOffAccessWindowSeconds) {
+      return {
+        hasAccess: true,
+        oneOffExpired: false,
+      };
+    }
+
+    const grantSourceCreated = Number(existingGrant.source_checkout_created_at || 0);
+    const hasNewerPurchase = latestMatchingPurchaseCreated > grantSourceCreated;
+
+    if (!hasNewerPurchase) {
+      return {
+        hasAccess: false,
+        oneOffExpired: true,
+      };
+    }
+  }
+
+  await env.DB.prepare(
+    `INSERT INTO one_off_access_grants (email, video_slug, granted_at, source_checkout_session_id, source_checkout_created_at)
+     VALUES (?, ?, ?, ?, ?)
+     ON CONFLICT(email, video_slug)
+     DO UPDATE SET
+       granted_at = excluded.granted_at,
+       source_checkout_session_id = excluded.source_checkout_session_id,
+       source_checkout_created_at = excluded.source_checkout_created_at`
+  )
+    .bind(email, video, current, latestMatchingSessionId, latestMatchingPurchaseCreated)
+    .run();
+
+  return {
+    hasAccess: true,
+    oneOffExpired: false,
+  };
 };
 
 const hasStripeAccess = async (env, email, video, videoKey) => {
@@ -444,7 +617,7 @@ const hasStripeAccess = async (env, email, video, videoKey) => {
     return false;
   };
 
-  const hasOneOffCheckoutAccess = async (customerId) => {
+  const hasOneOffCheckoutAccess = async () => {
     const oneOffAccessWindowDays = Number(env.ONE_OFF_ACCESS_WINDOW_DAYS || 90);
     const oneOffAccessWindowSeconds = oneOffAccessWindowDays * 24 * 60 * 60;
     const current = nowUnix();
@@ -457,27 +630,18 @@ const hasStripeAccess = async (env, email, video, videoKey) => {
       .bind(email, video)
       .first();
 
-    const customerSessions = await listCheckoutSessions({ customerId });
+    const allRecentSessions = await listCheckoutSessions();
 
-    let { latestMatchingPurchaseCreated, latestMatchingSessionId } = await findLatestMatchingOneOffPurchase(
-      customerSessions
-    );
+    const filteredByEmail = allRecentSessions.filter((session) => {
+      const sessionEmail = normalizeComparableEmail(
+        session.customer_details?.email || session.customer_email
+      );
+      return sessionEmail && sessionEmail === normalizeComparableEmail(email);
+    });
 
-    if (!latestMatchingPurchaseCreated) {
-      // Fallback for valid customers where checkout sessions weren't linked to customer ID.
-      const allRecentSessions = await listCheckoutSessions();
-
-      const filteredByEmail = allRecentSessions.filter((session) => {
-        const sessionEmail = normalizeComparableEmail(
-          session.customer_details?.email || session.customer_email
-        );
-        return sessionEmail && sessionEmail === normalizeComparableEmail(email);
-      });
-
-      const fallbackMatch = await findLatestMatchingOneOffPurchase(filteredByEmail);
-      latestMatchingPurchaseCreated = fallbackMatch.latestMatchingPurchaseCreated;
-      latestMatchingSessionId = fallbackMatch.latestMatchingSessionId;
-    }
+    const fallbackMatch = await findLatestMatchingOneOffPurchase(filteredByEmail);
+    let latestMatchingPurchaseCreated = fallbackMatch.latestMatchingPurchaseCreated;
+    let latestMatchingSessionId = fallbackMatch.latestMatchingSessionId;
 
     if (!latestMatchingPurchaseCreated) {
       const grantedAt = Number(existingGrant?.granted_at || 0);
@@ -544,21 +708,255 @@ const hasStripeAccess = async (env, email, video, videoKey) => {
         oneOffExpired: false,
       };
     }
+  }
 
-    const oneOffResult = await hasOneOffCheckoutAccess(customer.id);
-    if (oneOffResult.hasAccess) {
-      return oneOffResult;
-    }
+  // Primary deterministic source: webhook-persisted one-off entitlements.
+  const persistedResult = await hasOneOffAccessFromDb(env, email, video, videoKey);
+  if (persistedResult.hasAccess) {
+    return persistedResult;
+  }
 
-    if (oneOffResult.oneOffExpired) {
-      oneOffExpired = true;
-    }
+  if (persistedResult.oneOffExpired) {
+    oneOffExpired = true;
+  }
+
+  // Legacy fallback for historical purchases before webhook wiring.
+  const oneOffResult = await hasOneOffCheckoutAccess();
+  if (oneOffResult.hasAccess) {
+    return oneOffResult;
+  }
+
+  if (oneOffResult.oneOffExpired) {
+    oneOffExpired = true;
   }
 
   return {
     hasAccess: false,
     oneOffExpired,
   };
+};
+
+const persistOneOffEntitlementsFromSession = async (env, session) => {
+  const email = (session.customer_details?.email || session.customer_email || '').trim().toLowerCase();
+
+  if (!isValidEmail(email)) {
+    return { inserted: 0, reason: 'invalid_email' };
+  }
+
+  if (session.mode !== 'payment' || session.payment_status !== 'paid') {
+    return { inserted: 0, reason: 'not_paid_one_off' };
+  }
+
+  const sessionId = String(session.id || '').trim();
+  const sessionCreatedAt = Number(session.created || nowUnix());
+
+  if (!sessionId) {
+    return { inserted: 0, reason: 'missing_session_id' };
+  }
+
+  const productCache = new Map();
+  const priceCache = new Map();
+
+  const getProduct = async (productRef) => {
+    if (!productRef) {
+      return null;
+    }
+
+    if (typeof productRef !== 'string') {
+      return productRef;
+    }
+
+    if (productCache.has(productRef)) {
+      return productCache.get(productRef);
+    }
+
+    const product = await stripeRequest(env, `/v1/products/${encodeURIComponent(productRef)}`);
+    productCache.set(productRef, product);
+    return product;
+  };
+
+  const getPrice = async (priceRef) => {
+    if (!priceRef) {
+      return null;
+    }
+
+    if (typeof priceRef !== 'string') {
+      if (priceRef.product) {
+        return priceRef;
+      }
+
+      if (!priceRef.id || typeof priceRef.id !== 'string') {
+        return null;
+      }
+
+      if (priceCache.has(priceRef.id)) {
+        return priceCache.get(priceRef.id);
+      }
+
+      const fetchedPrice = await stripeRequest(env, `/v1/prices/${encodeURIComponent(priceRef.id)}`);
+      priceCache.set(priceRef.id, fetchedPrice);
+      return fetchedPrice;
+    }
+
+    if (priceCache.has(priceRef)) {
+      return priceCache.get(priceRef);
+    }
+
+    const price = await stripeRequest(env, `/v1/prices/${encodeURIComponent(priceRef)}`);
+    priceCache.set(priceRef, price);
+    return price;
+  };
+
+  const getProductFromPriceRef = async (priceRef) => {
+    const price = await getPrice(priceRef);
+    return getProduct(price?.product);
+  };
+
+  const lineItems = await stripeRequest(
+    env,
+    `/v1/checkout/sessions/${encodeURIComponent(sessionId)}/line_items`,
+    { limit: '100' }
+  );
+
+  let inserted = 0;
+
+  for (const item of lineItems.data || []) {
+    const product = await getProductFromPriceRef(item.price);
+
+    if (!product?.id) {
+      continue;
+    }
+
+    const accessAll = isTruthy(product?.metadata?.access_all) ? 1 : 0;
+    const accessVideos = (product?.metadata?.access_videos || '').trim();
+    const accessPrefixes = (product?.metadata?.access_prefixes || '').trim();
+
+    await env.DB.prepare(
+      `INSERT INTO stripe_checkout_entitlements
+        (email, session_id, session_created_at, product_id, access_all, access_videos, access_prefixes, created_at)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+       ON CONFLICT(email, session_id, product_id)
+       DO UPDATE SET
+         session_created_at = excluded.session_created_at,
+         access_all = excluded.access_all,
+         access_videos = excluded.access_videos,
+         access_prefixes = excluded.access_prefixes`
+    )
+      .bind(
+        email,
+        sessionId,
+        sessionCreatedAt,
+        product.id,
+        accessAll,
+        accessVideos,
+        accessPrefixes,
+        nowUnix()
+      )
+      .run();
+
+    inserted += 1;
+  }
+
+  return { inserted, reason: 'ok' };
+};
+
+const handleStripeWebhook = async (request, env) => {
+  const signatureHeader = request.headers.get('Stripe-Signature') || '';
+  const rawBody = await request.text();
+
+  const isValidSignature = await verifyStripeWebhookSignature(
+    rawBody,
+    signatureHeader,
+    env.STRIPE_WEBHOOK_SECRET
+  );
+
+  if (!isValidSignature) {
+    return json({ error: 'Invalid Stripe webhook signature.' }, { status: 401 });
+  }
+
+  let event;
+
+  try {
+    event = JSON.parse(rawBody);
+  } catch (_) {
+    return json({ error: 'Invalid webhook payload.' }, { status: 400 });
+  }
+
+  const eventType = String(event?.type || '');
+  const session = event?.data?.object;
+
+  if (
+    eventType === 'checkout.session.completed' ||
+    eventType === 'checkout.session.async_payment_succeeded'
+  ) {
+    await persistOneOffEntitlementsFromSession(env, session || {});
+  }
+
+  return json({ received: true }, { status: 200 });
+};
+
+const handleAdminBackfillOneOffEntitlements = async (request, env) => {
+  const authHeader = request.headers.get('Authorization') || '';
+  const expectedToken = (env.BACKFILL_ADMIN_TOKEN || '').trim();
+
+  if (!expectedToken || authHeader !== `Bearer ${expectedToken}`) {
+    return json({ error: 'Unauthorized.' }, { status: 401 });
+  }
+
+  const body = await parseJson(request);
+  const requestedPages = Number(body?.pages || env.BACKFILL_SCAN_PAGES || 20);
+  const pageLimit = Math.max(1, Math.min(50, requestedPages));
+  let startingAfter = (body?.startingAfter || '').trim();
+
+  let scannedSessions = 0;
+  let paidOneOffSessions = 0;
+  let insertedEntitlements = 0;
+
+  for (let page = 0; page < pageLimit; page += 1) {
+    const params = {
+      limit: '100',
+    };
+
+    if (startingAfter) {
+      params.starting_after = startingAfter;
+    }
+
+    const response = await stripeRequest(env, '/v1/checkout/sessions', params);
+    const pageData = response.data || [];
+
+    if (!pageData.length) {
+      startingAfter = '';
+      break;
+    }
+
+    for (const session of pageData) {
+      scannedSessions += 1;
+
+      if (session.mode === 'payment' && session.payment_status === 'paid') {
+        paidOneOffSessions += 1;
+        const persisted = await persistOneOffEntitlementsFromSession(env, session);
+        insertedEntitlements += Number(persisted.inserted || 0);
+      }
+    }
+
+    if (!response.has_more) {
+      startingAfter = '';
+      break;
+    }
+
+    startingAfter = pageData[pageData.length - 1].id;
+  }
+
+  return json(
+    {
+      ok: true,
+      scannedSessions,
+      paidOneOffSessions,
+      insertedEntitlements,
+      nextStartingAfter: startingAfter || null,
+    },
+    { status: 200 }
+  );
 };
 
 const sendEmail = async (env, email, verifyUrl) => {
@@ -938,6 +1336,10 @@ export default {
         response = await handleRequestEmailLink(request, env);
       } else if (request.method === 'POST' && url.pathname === '/v1/access/verify-email') {
         response = await handleVerifyEmail(request, env);
+      } else if (request.method === 'POST' && url.pathname === '/v1/stripe/webhook') {
+        response = await handleStripeWebhook(request, env);
+      } else if (request.method === 'POST' && url.pathname === '/v1/admin/backfill-one-off-entitlements') {
+        response = await handleAdminBackfillOneOffEntitlements(request, env);
       } else if (request.method === 'GET' && url.pathname === '/v1/access/stream') {
         response = await handleStream(request, env);
       } else {
